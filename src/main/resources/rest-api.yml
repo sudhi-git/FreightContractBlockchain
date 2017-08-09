@@ -1,27 +1,221 @@
-swagger: 2
+swagger: '2.0'
 info:
-  title: API to store Freight Contract in Blockchain
-  description: Freight Contract API to recieve the Freight Contract from SAP TM system and forward to Blockchain
-  version: "1.0.0"
-host: api.sap.com
+  description: >-
+    REST API to accept the freight contract from the SAP TM system and map the
+    same to blockchain format and forward to blockchain
+  version: 1.0.0
+  title: Freight Contract API for Blockchain
+  contact:
+    email: sudhi.bhat79@gmail.com
+host: cfapps-hana.ondemand.com
+basePath: /v2
+tags:
+  - name: FreightContract
+    description: Store your freight contract in blockchain
+    externalDocs:
+      description: Find out more
+      url: 'https://github.com/sudhi-git/FreightContractAPI'
 schemes:
-  - https
-basePath: /v1
-produces:
-  - application/json
-# security: 
-#  - oauth2: 
-#    $ref: security/github/accessCode
-#  - apitoken: 
-#    type: "header"
-#    name: "api_key"
+  - http
 paths:
   /saveContractInChain:
     post:
-      summary: Save the Freight Contract in Blockchain
-      description: This endpoint recieves the SAP TM Freight Contract and converts into the chain API format and forwards it to blockchain to persist
+      tags:
+        - FreightContract
+      summary: >-
+        Convert the freight contract in TM Format to Block chain format and push
+        to blockchain
+      description: ''
+      operationId: saveInChain
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
       parameters:
-        - name: FreightContractUUID
+        - in: body
+          name: body
+          description: Contract object that needs to be added in Blockchain
+          required: true
+          schema:
+            $ref: '#/definitions/FreightContract'
+      responses:
+        '405':
+          description: Invalid input
+    security:
+      - contract_auth:
+          - 'write:contracts'
+          - 'read:contracts'
+    put:
+      tags:
+        - FreightContract
+      summary: Update an Freight Contract in blockchain
+      description: ''
+      operationId: updateContractInChain
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Contract object that needs to be updated in chain
+          required: true
+          schema:
+            $ref: '#/definitions/FreightContract'
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Contract not found
+        '405':
+          description: Validation exception
+securityDefinitions:
+  contract_auth:
+    type: oauth2
+    authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+    flow: implicit
+    scopes:
+      'write:contracts': Modify contracts in blockchain
+      'read:contracts': Read your contracts
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  FreightContract:
+    type: object
+    properties:
+      FreightContractUUID:
+        type: string
+        description: Unique identification of the contract
+      FreightContractId:
+        type: string
+        description: Human readable ID of the contract
+      ValidityStart:
+        type: string
+        format: date-time
+        description: Validity start date and time with time zone
+      ValidityEnd:
+        type: string
+        format: date-time
+        description: Validity End Date and time with time zone
+      Currency:
+        type: string
+        description: Currency of the contract
+      ShippingType:
+        type: string
+        description: Shipping type for which the contract is valid
+        enum:
+          - LCL (Less than container Load)
+          - FCL (Full container load
+      ModeOfTransport:
+        type: string
+        description: Mode of transport for which the contract is valid
+        enum:
+          - Road
+          - Rail
+          - Sea
+          - Air
+      complete:
+        type: boolean
+        default: false
+    xml:
+      name: Order
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+    xml:
+      name: Category
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+        format: int32
+        description: User Status
+    xml:
+      name: User
+  Tag:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+    xml:
+      name: Tag
+  Pet:
+    type: object
+    required:
+      - name
+      - photoUrls
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        $ref: '#/definitions/Category'
+      name:
+        type: string
+        example: doggie
+      photoUrls:
+        type: array
+        xml:
+          name: photoUrl
+          wrapped: true
+        items:
           type: string
-          description: Unique identification of the Freight Contract in the blockchain(will be generated if the source system does not send this)
-          required: false
+      tags:
+        type: array
+        xml:
+          name: tag
+          wrapped: true
+        items:
+          $ref: '#/definitions/Tag'
+      status:
+        type: string
+        description: pet status in the store
+        enum:
+          - available
+          - pending
+          - sold
+    xml:
+      name: Pet
+  ApiResponse:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      type:
+        type: string
+      message:
+        type: string
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
