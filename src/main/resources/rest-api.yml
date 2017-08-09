@@ -1,0 +1,27 @@
+swagger: 2
+info:
+  title: API to store Freight Contract in Blockchain
+  description: Freight Contract API to recieve the Freight Contract from SAP TM system and forward to Blockchain
+  version: "1.0.0"
+host: api.sap.com
+schemes:
+  - https
+basePath: /v1
+produces:
+  - application/json
+# security: 
+#  - oauth2: 
+#    $ref: security/github/accessCode
+#  - apitoken: 
+#    type: "header"
+#    name: "api_key"
+paths:
+  /saveContractInChain:
+    post:
+      summary: Save the Freight Contract in Blockchain
+      description: This endpoint recieves the SAP TM Freight Contract and converts into the chain API format and forwards it to blockchain to persist
+      parameters:
+        - name: FreightContractUUID
+          type: string
+          description: Unique identification of the Freight Contract in the blockchain(will be generated if the source system does not send this)
+          required: false
