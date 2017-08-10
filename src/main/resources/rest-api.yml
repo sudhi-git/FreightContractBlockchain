@@ -18,7 +18,7 @@ tags:
 schemes:
   - http
 paths:
-  /saveContractInChain:
+  /ContractInChain:
     post:
       tags:
         - FreightContract
@@ -43,10 +43,10 @@ paths:
       responses:
         '405':
           description: Invalid input
-    security:
-      - contract_auth:
-          - 'write:contracts'
-          - 'read:contracts'
+      security:
+        - contract_auth:
+            - 'write:contracts'
+            - 'read:contracts'
     put:
       tags:
         - FreightContract
@@ -73,6 +73,10 @@ paths:
           description: Contract not found
         '405':
           description: Validation exception
+      security:
+        - contract_auth:
+            - 'write:contracts'
+            - 'read:contracts'
 securityDefinitions:
   contract_auth:
     type: oauth2
@@ -120,92 +124,181 @@ definitions:
           - Rail
           - Sea
           - Air
-      complete:
-        type: boolean
-        default: false
+      BP1:
+        type: array
+        description: Party owning the contract
+        $ref: '#/definitions/BusinessPartner'
+      BP2:
+        type: array
+        description: Party with whom the contract is negotiated
+        $ref: '#/definitions/BusinessPartner'
+      CalculationSheet:
+        type: array
+        description: Calculation sheets of the contract
+        $ref: '#/definitions/ContractItems'
     xml:
-      name: Order
-  Category:
+      name: FreightContractHeader
+  BusinessPartner:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
-      name:
+      BPUUID:
         type: string
-    xml:
-      name: Category
-  User:
+        description: Unique identifier of the business partner
+      BPId:
+        type: string
+        description: Human readble format of the business partner
+      BPDescription:
+        type: string
+        description: Business partner description
+      BPRole:
+        type: string
+        description: Role of the business partner
+      Address:
+        type: array
+        $ref: '#/definitions/Address'
+  Address:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
-      username:
-        type: string
-      firstName:
-        type: string
-      lastName:
-        type: string
-      email:
-        type: string
-      password:
-        type: string
-      phone:
-        type: string
-      userStatus:
+      AddressNumber:
         type: integer
         format: int32
-        description: User Status
-    xml:
-      name: User
-  Tag:
+        description: Address number of the business partner
+      Street1:
+        type: string
+        description: Street1 part of the address
+      Street2:
+        type: string
+        description: Street2 part of the address
+      HouseNumber:
+        type: string
+        description: House Number of the address
+      PostalCode:
+        type: string
+        description: Postal Code
+      City:
+        type: string
+        description: City
+      Country:
+        type: string
+        description: Country
+      CountryCode:
+        type: string
+        description: Country Code
+      EmailAddress:
+        type: string
+        description: Email address of the business partner
+      PhoneNumber:
+        type: string
+        description: Phone number of the business partner
+  ContractItems:
     type: object
     properties:
-      id:
-        type: integer
-        format: int64
-      name:
+      FreightContractId:
         type: string
-    xml:
-      name: Tag
-  Pet:
+        description: Freight Contract to which the contract items belong to
+      FreightContractUUID:
+        type: string
+        description: Freight Contract UUID to which the contract items belong to
+      ItemUUID:
+        type: string
+        description: UUID of the contract item
+      ItemId:
+        type: string
+        description: ID of the contract item
+      StageType:
+        type: string
+        description: Stage type pre-condition for the contract item
+      ShippingType:
+        type: string
+        description: Shipping type pre-condition for the contract item
+      Items:
+        type: array
+        $ref: '#/definitions/CalcSheetItems'
+  CalcSheetItems:
     type: object
-    required:
-      - name
-      - photoUrls
     properties:
-      id:
-        type: integer
-        format: int64
-      category:
-        $ref: '#/definitions/Category'
-      name:
+      ItemUUID:
         type: string
-        example: doggie
-      photoUrls:
-        type: array
-        xml:
-          name: photoUrl
-          wrapped: true
-        items:
-          type: string
-      tags:
-        type: array
-        xml:
-          name: tag
-          wrapped: true
-        items:
-          $ref: '#/definitions/Tag'
-      status:
+      ItemId:
         type: string
-        description: pet status in the store
+        description: Human readable format of the calculation sheet item
+      ChargeType:
+        type: string
+        description: Charge Type
+      ChargeTypeDesc:
+        type: string
+        description: Charge Type description
+      InstructionCode:
+        type: string
+        description: Instruction code (STND/SUM/EVAL)
         enum:
-          - available
-          - pending
-          - sold
-    xml:
-      name: Pet
+          - STND
+          - EVAL
+          - SUM
+          - SUBTOTAL
+      OperationCode:
+        type: string
+        description: Operation code in case of EVAL lines
+        enum:
+          - Low
+          - High
+          - AccessSequence
+      ParentItemUUID:
+        type: string
+        description: Parent reference in case of hierarchy
+      RateAmount:
+        type: number
+        description: Rate amount
+      RateCurrency:
+        type: string
+        description: Rate currency
+      MaxAmount:
+        type: number
+        description: Maximum Amount
+      MaxCurrency:
+        type: string
+        description: Maximum currency
+      CalculationBase:
+        type: string
+        description: Calculation base of a calculation rule
+      PriceUnit:
+        type: number
+        description: Calculation rule quantity
+      PriceUnitUoM:
+        type: string
+        description: Calculation rule quantity unit of measure
+      ResolutionBase:
+        type: string
+        description: Resolution base of the charge type
+      CalculationMethod:
+        type: string
+        description: >-
+          Calculation method of the charge. (Standard, break weight, clipping
+          etc.)
+      RateTableUUID:
+        type: string
+        description: UUID of the rate table
+      RateTableID:
+        type: string
+        description: Human readable format of the rate table
+      Notes:
+        type: array
+        $ref: '#/definitions/Notes'
+  Notes:
+    type: object
+    properties:
+      NoteUUID:
+        type: string
+        description: Note UUID
+      NoteType:
+        type: string
+        description: Note Type
+      Language:
+        type: string
+        description: Language of the note
+      Description:
+        type: string
+        description: Note description
   ApiResponse:
     type: object
     properties:
