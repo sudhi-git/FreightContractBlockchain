@@ -9,4 +9,8 @@ public class FreightContractService {
 	public String saveInChain(FreightContractHeader contract){
 		return contract.getFreightContractUUID();
 	}
+	
+	public String updateInChain(FreightContractHeader contract){
+		return contract.getFreightContractUUID();
+	}
 }

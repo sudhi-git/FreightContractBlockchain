@@ -1,0 +1,314 @@
+swagger: '2.0'
+info:
+  description: >-
+    REST API to accept the freight contract from the SAP TM system and map the
+    same to blockchain format and forward to blockchain
+  version: 1.0.0
+  title: Freight Contract API for Blockchain
+  contact:
+    email: sudhi.bhat79@gmail.com
+host: cfapps-hana.ondemand.com
+basePath: /v2
+tags:
+  - name: FreightContract
+    description: Store your freight contract in blockchain
+    externalDocs:
+      description: Find out more
+      url: 'https://github.com/sudhi-git/FreightContractAPI'
+schemes:
+  - http
+paths:
+  /ContractInChain:
+    post:
+      tags:
+        - FreightContract
+      summary: >-
+        Convert the freight contract in TM Format to Block chain format and push
+        to blockchain
+      description: ''
+      operationId: saveInChain
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Contract object that needs to be added in Blockchain
+          required: true
+          schema:
+            $ref: '#/definitions/FreightContract'
+      responses:
+        '405':
+          description: Invalid input
+      security:
+        - contract_auth:
+            - 'write:contracts'
+            - 'read:contracts'
+    put:
+      tags:
+        - FreightContract
+      summary: Update an Freight Contract in blockchain
+      description: ''
+      operationId: updateContractInChain
+      consumes:
+        - application/json
+        - application/xml
+      produces:
+        - application/xml
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Contract object that needs to be updated in chain
+          required: true
+          schema:
+            $ref: '#/definitions/FreightContract'
+      responses:
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Contract not found
+        '405':
+          description: Validation exception
+      security:
+        - contract_auth:
+            - 'write:contracts'
+            - 'read:contracts'
+securityDefinitions:
+  contract_auth:
+    type: oauth2
+    authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+    flow: implicit
+    scopes:
+      'write:contracts': Modify contracts in blockchain
+      'read:contracts': Read your contracts
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+definitions:
+  FreightContract:
+    type: object
+    properties:
+      FreightContractUUID:
+        type: string
+        description: Unique identification of the contract
+      FreightContractId:
+        type: string
+        description: Human readable ID of the contract
+      ValidityStart:
+        type: string
+        format: date-time
+        description: Validity start date and time with time zone
+      ValidityEnd:
+        type: string
+        format: date-time
+        description: Validity End Date and time with time zone
+      Currency:
+        type: string
+        description: Currency of the contract
+      ShippingType:
+        type: string
+        description: Shipping type for which the contract is valid
+        enum:
+          - LCL (Less than container Load)
+          - FCL (Full container load
+      ModeOfTransport:
+        type: string
+        description: Mode of transport for which the contract is valid
+        enum:
+          - Road
+          - Rail
+          - Sea
+          - Air
+      BP1:
+        type: array
+        description: Party owning the contract
+        $ref: '#/definitions/BusinessPartner'
+      BP2:
+        type: array
+        description: Party with whom the contract is negotiated
+        $ref: '#/definitions/BusinessPartner'
+      CalculationSheet:
+        type: array
+        description: Calculation sheets of the contract
+        $ref: '#/definitions/ContractItems'
+    xml:
+      name: FreightContractHeader
+  BusinessPartner:
+    type: object
+    properties:
+      BPUUID:
+        type: string
+        description: Unique identifier of the business partner
+      BPId:
+        type: string
+        description: Human readble format of the business partner
+      BPDescription:
+        type: string
+        description: Business partner description
+      BPRole:
+        type: string
+        description: Role of the business partner
+      Address:
+        type: array
+        $ref: '#/definitions/Address'
+  Address:
+    type: object
+    properties:
+      AddressNumber:
+        type: integer
+        format: int32
+        description: Address number of the business partner
+      Street1:
+        type: string
+        description: Street1 part of the address
+      Street2:
+        type: string
+        description: Street2 part of the address
+      HouseNumber:
+        type: string
+        description: House Number of the address
+      PostalCode:
+        type: string
+        description: Postal Code
+      City:
+        type: string
+        description: City
+      Country:
+        type: string
+        description: Country
+      CountryCode:
+        type: string
+        description: Country Code
+      EmailAddress:
+        type: string
+        description: Email address of the business partner
+      PhoneNumber:
+        type: string
+        description: Phone number of the business partner
+  ContractItems:
+    type: object
+    properties:
+      FreightContractId:
+        type: string
+        description: Freight Contract to which the contract items belong to
+      FreightContractUUID:
+        type: string
+        description: Freight Contract UUID to which the contract items belong to
+      ItemUUID:
+        type: string
+        description: UUID of the contract item
+      ItemId:
+        type: string
+        description: ID of the contract item
+      StageType:
+        type: string
+        description: Stage type pre-condition for the contract item
+      ShippingType:
+        type: string
+        description: Shipping type pre-condition for the contract item
+      Items:
+        type: array
+        $ref: '#/definitions/CalcSheetItems'
+  CalcSheetItems:
+    type: object
+    properties:
+      ItemUUID:
+        type: string
+      ItemId:
+        type: string
+        description: Human readable format of the calculation sheet item
+      ChargeType:
+        type: string
+        description: Charge Type
+      ChargeTypeDesc:
+        type: string
+        description: Charge Type description
+      InstructionCode:
+        type: string
+        description: Instruction code (STND/SUM/EVAL)
+        enum:
+          - STND
+          - EVAL
+          - SUM
+          - SUBTOTAL
+      OperationCode:
+        type: string
+        description: Operation code in case of EVAL lines
+        enum:
+          - Low
+          - High
+          - AccessSequence
+      ParentItemUUID:
+        type: string
+        description: Parent reference in case of hierarchy
+      RateAmount:
+        type: number
+        description: Rate amount
+      RateCurrency:
+        type: string
+        description: Rate currency
+      MaxAmount:
+        type: number
+        description: Maximum Amount
+      MaxCurrency:
+        type: string
+        description: Maximum currency
+      CalculationBase:
+        type: string
+        description: Calculation base of a calculation rule
+      PriceUnit:
+        type: number
+        description: Calculation rule quantity
+      PriceUnitUoM:
+        type: string
+        description: Calculation rule quantity unit of measure
+      ResolutionBase:
+        type: string
+        description: Resolution base of the charge type
+      CalculationMethod:
+        type: string
+        description: >-
+          Calculation method of the charge. (Standard, break weight, clipping
+          etc.)
+      RateTableUUID:
+        type: string
+        description: UUID of the rate table
+      RateTableID:
+        type: string
+        description: Human readable format of the rate table
+      Notes:
+        type: array
+        $ref: '#/definitions/Notes'
+  Notes:
+    type: object
+    properties:
+      NoteUUID:
+        type: string
+        description: Note UUID
+      NoteType:
+        type: string
+        description: Note Type
+      Language:
+        type: string
+        description: Language of the note
+      Description:
+        type: string
+        description: Note description
+  ApiResponse:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      type:
+        type: string
+      message:
+        type: string
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
