@@ -3,7 +3,7 @@ Implementation-Title: FreightContractAPI
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: I033516
 Implementation-Vendor-Id: com.sudhi.samples.freightcontract
-Build-Jdk: 1.8.0_121
+Build-Jdk: 1.8.0_144
 Implementation-URL: http://projects.spring.io/spring-boot/FreightContr
  act/
 Created-By: Maven Integration for Eclipse

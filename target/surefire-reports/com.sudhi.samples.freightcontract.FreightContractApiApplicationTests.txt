@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.sudhi.samples.freightcontract.FreightContractApiApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.255 sec - in com.sudhi.samples.freightcontract.FreightContractApiApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.718 sec - in com.sudhi.samples.freightcontract.FreightContractApiApplicationTests

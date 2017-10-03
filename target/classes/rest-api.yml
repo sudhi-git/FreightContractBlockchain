@@ -107,6 +107,24 @@ definitions:
         type: string
         format: date-time
         description: Validity End Date and time with time zone
+      BP1Id:
+        type: string
+        description: Originator of the contract
+      BP1Role:
+        type: string
+        description: Role of the Business partner
+      BP1Desc:
+        type: string
+        description: BP1 Description      
+      BP2Id:
+        type: string
+        description: Business Partner with whom the contract is negotiated
+      BP2Role:
+        type: string
+        description: Role of the Business partner
+      BP2Desc:
+        type: string
+        description: BP2 Description
       Currency:
         type: string
         description: Currency of the contract
@@ -124,72 +142,15 @@ definitions:
           - Rail
           - Sea
           - Air
-      BP1:
-        type: array
-        description: Party owning the contract
-        $ref: '#/definitions/BusinessPartner'
-      BP2:
-        type: array
-        description: Party with whom the contract is negotiated
-        $ref: '#/definitions/BusinessPartner'
+      ExternalFreightAgreementID:
+        type: string
+        description: External Freight Agreement ID that both parties recognize    
       CalculationSheet:
         type: array
         description: Calculation sheets of the contract
         $ref: '#/definitions/ContractItems'
     xml:
       name: FreightContractHeader
-  BusinessPartner:
-    type: object
-    properties:
-      BPUUID:
-        type: string
-        description: Unique identifier of the business partner
-      BPId:
-        type: string
-        description: Human readble format of the business partner
-      BPDescription:
-        type: string
-        description: Business partner description
-      BPRole:
-        type: string
-        description: Role of the business partner
-      Address:
-        type: array
-        $ref: '#/definitions/Address'
-  Address:
-    type: object
-    properties:
-      AddressNumber:
-        type: integer
-        format: int32
-        description: Address number of the business partner
-      Street1:
-        type: string
-        description: Street1 part of the address
-      Street2:
-        type: string
-        description: Street2 part of the address
-      HouseNumber:
-        type: string
-        description: House Number of the address
-      PostalCode:
-        type: string
-        description: Postal Code
-      City:
-        type: string
-        description: City
-      Country:
-        type: string
-        description: Country
-      CountryCode:
-        type: string
-        description: Country Code
-      EmailAddress:
-        type: string
-        description: Email address of the business partner
-      PhoneNumber:
-        type: string
-        description: Phone number of the business partner
   ContractItems:
     type: object
     properties:
@@ -281,25 +242,7 @@ definitions:
       RateTableID:
         type: string
         description: Human readable format of the rate table
-      Notes:
-        type: array
-        $ref: '#/definitions/Notes'
-  Notes:
-    type: object
-    properties:
-      NoteUUID:
-        type: string
-        description: Note UUID
-      NoteType:
-        type: string
-        description: Note Type
-      Language:
-        type: string
-        description: Language of the note
-      Description:
-        type: string
-        description: Note description
-  ApiResponse:
+ApiResponse:
     type: object
     properties:
       code:

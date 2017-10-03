@@ -23,6 +23,10 @@ public class CalculationSheetItems {
 	private double rateAmount;
 	@JsonProperty("RateCurrency")
 	private String rateCurrency;
+	@JsonProperty("MinAmount")
+	private double minAmount;
+	@JsonProperty("MinCurrency")
+	private String minCurrency;	
 	@JsonProperty("MaxAmount")
 	private double maxAmount;
 	@JsonProperty("MaxCurrency")
@@ -37,10 +41,6 @@ public class CalculationSheetItems {
 	private String resBase;
 	@JsonProperty("CalculationMethod")
 	private String calcMethod;
-	@JsonProperty("RateTableUUID")
-	private String rateTableUUID;
-	@JsonProperty("Notes")
-	private List<Notes> notes;
 	@ApiModelProperty(value = "Item UUID of the contract item")
 	public String getItemUUID() {
 		return ItemUUID;
@@ -97,6 +97,20 @@ public class CalculationSheetItems {
 	public void setRateCurrency(String rateCurrency) {
 		this.rateCurrency = rateCurrency;
 	}
+	@ApiModelProperty(value = "Minimum amount of the contract item")
+	public double getMinAmount() {
+		return minAmount;
+	}
+	public void setMinAmount(double minAmount) {
+		this.minAmount = minAmount;
+	}
+	@ApiModelProperty(value = "Minimum amount currency of the contract item")
+	public String getMinCurrency() {
+		return minCurrency;
+	}
+	public void setMinCurrency(String minCurrency) {
+		this.minCurrency = minCurrency;
+	}
 	@ApiModelProperty(value = "Maximum amount of the contract item")
 	public double getMaxAmount() {
 		return maxAmount;
@@ -146,22 +160,7 @@ public class CalculationSheetItems {
 	public void setCalcMethod(String calcMethod) {
 		this.calcMethod = calcMethod;
 	}
-	@ApiModelProperty(value = "Rate table UUID of the contract item")
-	public String getRateTableUUID() {
-		return rateTableUUID;
-	}
-	public void setRateTableUUID(String rateTableUUID) {
-		this.rateTableUUID = rateTableUUID;
-	}
-	public List<Notes> getNotes() {
-		return notes;
-	}
-	public void setNotes(List<Notes> notes) {
-		this.notes = notes;
-	}
 	public CalculationSheetItems() {
 		super();
 	}
-	
-	
 }

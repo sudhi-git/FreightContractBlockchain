@@ -72,6 +72,4 @@ public class ContractItems {
 	public ContractItems() {
 		super();
 	}
-	
-	
 }

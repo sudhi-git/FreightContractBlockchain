@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.sudhi.samples.freightcontract.FreightContractApiApplicationTests" time="0.053" tests="1" errors="0" skipped="0" failures="0">
+<testsuite name="com.sudhi.samples.freightcontract.FreightContractApiApplicationTests" time="0.052" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_121\jre\bin"/>
@@ -28,7 +28,7 @@
     <property name="os.name" value="Windows 10"/>
     <property name="classworlds.conf" value="C:\Cloud Tools\apache-maven-3.3.9\bin\m2.conf"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
-    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Main Data/eclipse/jre/bin/server;C:/Main Data/eclipse/jre/bin;C:/Main Data/eclipse/jre/lib/amd64;c:\windows;c:\windows\system32\wbem;c:\programdata\oracle\java\javapath;C:\Cloud Tools\apache-maven-3.3.9\bin;C:\Cloud Tools\apache-maven-3.3.9\bin;c:\program files\cloud foundry;C:\WinPython-64bit-3.5.3.1Qt5\python-3.5.3.amd64\lib;C:\WinPython-64bit-3.5.3.1Qt5\python-3.5.3.amd64;c:\program files\git\cmd;c:\program files (x86)\quicktime\qtsystem\;c:\program files\nodejs\;c:\curl\;c:\go\bin;c:\program files\mingw-w64\x86_64-7.1.0-posix-seh-rt_v5-rev1\mingw64\bin;c:\windows\system32;c:\users\i033516\blockchain\bin;c:\cygwin\bin;c:\program files\putty\;C:\Users\i033516\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin;C:\Main Data\eclipse;;."/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_121\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;c:\windows;c:\windows\system32\wbem;c:\programdata\oracle\java\javapath;C:\Cloud Tools\apache-maven-3.3.9\bin;C:\Cloud Tools\apache-maven-3.3.9\bin;c:\program files\cloud foundry;C:\WinPython-64bit-3.5.3.1Qt5\python-3.5.3.amd64\lib;C:\WinPython-64bit-3.5.3.1Qt5\python-3.5.3.amd64;c:\program files\git\cmd;c:\program files (x86)\quicktime\qtsystem\;c:\program files\nodejs\;c:\curl\;c:\go\bin;c:\program files\mingw-w64\x86_64-7.1.0-posix-seh-rt_v5-rev1\mingw64\bin;c:\windows\system32;c:\users\i033516\blockchain\bin;c:\cygwin\bin;c:\program files\putty\;C:\Users\i033516\AppData\Roaming\npm;C:\Program Files\Microsoft VS Code\bin;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -38,12 +38,12 @@
     <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
     <property name="java.specification.version" value="1.8"/>
     <property name="file.encoding" value="Cp1252"/>
-    <property name="user.name" value="i033516"/>
+    <property name="user.name" value="I033516"/>
     <property name="java.class.path" value="C:\Cloud Tools\apache-maven-3.3.9\boot\plexus-classworlds-2.5.2.jar"/>
     <property name="java.vm.specification.version" value="1.8"/>
     <property name="sun.arch.data.model" value="64"/>
     <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_121\jre"/>
-    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean install"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher clean package"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
     <property name="user.language" value="en"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -62,5 +62,5 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase name="contextLoads" classname="com.sudhi.samples.freightcontract.FreightContractApiApplicationTests" time="0.053"/>
+  <testcase name="contextLoads" classname="com.sudhi.samples.freightcontract.FreightContractApiApplicationTests" time="0.052"/>
 </testsuite>

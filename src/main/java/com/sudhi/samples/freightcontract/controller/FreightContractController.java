@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
@@ -31,19 +32,19 @@ public class FreightContractController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="saveContractInChain", headers="Accept=application/json")
-	public ResponseEntity<Void> saveContractInChain(@RequestBody FreightContractHeader contract){
+	public ResponseEntity<?> saveContractInChain(@RequestBody FreightContractHeader contract){
 		String contractUUID = contractService.saveInChain(contract);
-		HttpHeaders HttpHeader = new HttpHeaders();
-		HttpHeader.add("FreightContractUUID", contractUUID);
-		return new ResponseEntity<Void>(HttpHeader, HttpStatus.OK);
+		ContractResponse ctrResponse = new ContractResponse();
+		ctrResponse.setContractUUID(contractUUID);
+		return new ResponseEntity<>(ctrResponse, HttpStatus.OK);
 	}  
 		
 	@RequestMapping(method=RequestMethod.PUT, value="updateContractInChain", headers="Accept=application/json")
-	public ResponseEntity<Void> updateContractInChain(@RequestBody FreightContractHeader contract){
+	public @ResponseBody ContractResponse updateContractInChain(@RequestBody FreightContractHeader contract){
 		String contractUUID = contractService.updateInChain(contract);
-		HttpHeaders HttpHeader = new HttpHeaders();
-		HttpHeader.add("FreightContractUUID", contractUUID);
-		return new ResponseEntity<Void>(HttpHeader, HttpStatus.OK);
+		ContractResponse ctrResponse = new ContractResponse();
+		ctrResponse.setContractUUID(contractUUID);
+		return ctrResponse;
 	}
 	
 }

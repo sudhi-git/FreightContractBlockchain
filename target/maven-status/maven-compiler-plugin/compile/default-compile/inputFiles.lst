@@ -1,12 +1,11 @@
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\controller\FreightContractController.java
-C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\dto\Address.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\FreightContractApiApplication.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\RFC3339DateFormat.java
+C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\controller\ContractResponse.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\service\FreightContractService.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\dto\CalculationSheetItems.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\dto\FreightContractHeader.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\config\SwaggerConfig.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\dto\Notes.java
-C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\dto\BusinessPartner.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\controller\HomeController.java
 C:\Users\i033516\git\FreightContractAPI\src\main\java\com\sudhi\samples\freightcontract\dto\ContractItems.java

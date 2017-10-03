@@ -14,6 +14,8 @@ public class FreightContractHeader {
 	private String freightContractUUID;
 	@JsonProperty("FreightContractID")
 	private String freightContractID;
+	@JsonProperty("ExternalFreightContractID")
+	private String extFreightContractID;	
 	@JsonProperty("ContractDescription")
 	private String contractDescription;
 	@JsonProperty("ValidityStart")
@@ -22,18 +24,22 @@ public class FreightContractHeader {
 	private DateTime validityEnd;
 	@JsonProperty("BP1Id")
 	private String bp1Id;
+	@JsonProperty("BP1Role")
+	private String bp1Role;	
+	@JsonProperty("BP1Desc")
+	private String bp1Desc;	
 	@JsonProperty("BP2Id")
 	private String bp2Id;
+	@JsonProperty("BP2Role")
+	private String bp2Role;
+	@JsonProperty("BP2Desc")
+	private String bp2Desc;	
 	@JsonProperty("Currency")
 	private String currency;
 	@JsonProperty("ShippingType")
 	private String shippingType;
 	@JsonProperty("ModeOfTransport")
 	private String MoT;
-	@JsonProperty("BP1")
-	private List<BusinessPartner> bp1;
-	@JsonProperty("BP2")
-	private List<BusinessPartner> bp2;
 	@JsonProperty("CalculationSheet")
 	private List<ContractItems> items;
 	public String getFreightContractUUID() {
@@ -109,18 +115,6 @@ public class FreightContractHeader {
 	public void setMoT(String moT) {
 		MoT = moT;
 	}
-	public List<BusinessPartner> getBp1() {
-		return bp1;
-	}
-	public void setBp1(List<BusinessPartner> bp1) {
-		this.bp1 = bp1;
-	}
-	public List<BusinessPartner> getBp2() {
-		return bp2;
-	}
-	public void setBp2(List<BusinessPartner> bp2) {
-		this.bp2 = bp2;
-	}
 	public List<ContractItems> getItems() {
 		return items;
 	}
@@ -130,6 +124,40 @@ public class FreightContractHeader {
 	public FreightContractHeader() {
 		super();
 	}
+	@ApiModelProperty(value = "Role of contract originator business partner", example="OrderingParty")
+	public String getBp1Role() {
+		return bp1Role;
+	}
+	public void setBp1Role(String bp1Role) {
+		this.bp1Role = bp1Role;
+	}
+	@ApiModelProperty(value = "Business partner description", example="BP1Description")
+	public String getBp1Desc() {
+		return bp1Desc;
+	}
+	public void setBp1Desc(String bp1Desc) {
+		this.bp1Desc = bp1Desc;
+	}
+	@ApiModelProperty(value = "Role of business partner with whom the contract is negotiated", example="Carrier")
+	public String getBp2Role() {
+		return bp2Role;
+	}
+	public void setBp2Role(String bp2Role) {
+		this.bp2Role = bp2Role;
+	}
+	@ApiModelProperty(value = "Business Partner description", example="BP2Desc")
+	public String getBp2Desc() {
+		return bp2Desc;
+	}
+	public void setBp2Desc(String bp2Desc) {
+		this.bp2Desc = bp2Desc;
+	}
+	@ApiModelProperty(value = "External Freight Agreement ID that both parties recognize", example="ExtFreightAgreement")
+	public String getExtFreightContractID() {
+		return extFreightContractID;
+	}
+	public void setExtFreightContractID(String extFreightContractID) {
+		this.extFreightContractID = extFreightContractID;
+	}
 	
-
 }
