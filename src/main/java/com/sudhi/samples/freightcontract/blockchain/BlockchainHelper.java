@@ -16,6 +16,9 @@ public class BlockchainHelper {
 	
     public BlockchainHelper() {
     	
+    	// Load configuration data
+    	InitializeConfig.Init();
+    	
     	try{
         	HFClient client = HFClient.createNewInstance();
         	client.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
