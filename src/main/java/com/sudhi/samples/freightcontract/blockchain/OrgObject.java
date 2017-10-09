@@ -1,5 +1,8 @@
 package com.sudhi.samples.freightcontract.blockchain;
 
+import java.util.HashMap;
+import java.util.Properties;
+
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 
 public class OrgObject {
@@ -7,11 +10,21 @@ public class OrgObject {
 	private String mspid;
 	private String ordererLocation;
 	private String peerLocation;
+	private String caLocation;
+	private String eventHubLocation;
 	private ContractUser admin;
 	private ContractUser peerAdmin;
+	private HashMap<String, ContractUser> users = new HashMap<>();
 	private HFCAClient caClient;
 	private String domainName;
 	private String caName;
+	private Properties caProperties;
+	public Properties getCaProperties() {
+		return caProperties;
+	}
+	public void setCaProperties(Properties caProperties) {
+		this.caProperties = caProperties;
+	}
 	public String getName() {
 		return name;
 	}
@@ -66,4 +79,20 @@ public class OrgObject {
 	public void setCaName(String caName) {
 		this.caName = caName;
 	}
+	public String getCaLocation() {
+		return caLocation;
+	}
+	public void setCaLocation(String caLocation) {
+		this.caLocation = caLocation;
+	}
+	public String getEventHubLocation() {
+		return eventHubLocation;
+	}
+	public void setEventHubLocation(String eventHubLocation) {
+		this.eventHubLocation = eventHubLocation;
+	}
+	public void addUser(ContractUser user){
+		users.put(user.getName(), user);
+	}
+	
 }

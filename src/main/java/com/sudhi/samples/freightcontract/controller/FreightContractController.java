@@ -2,13 +2,12 @@ package com.sudhi.samples.freightcontract.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
@@ -31,20 +30,23 @@ public class FreightContractController {
 		this.contractService = contractService;
 	}
 	
-	@RequestMapping(method=RequestMethod.POST, value="saveContractInChain", headers="Accept=application/json")
-	public ResponseEntity<?> saveContractInChain(@RequestBody FreightContractHeader contract){
-		String contractUUID = contractService.saveInChain(contract);
-		ContractResponse ctrResponse = new ContractResponse();
-		ctrResponse.setContractUUID(contractUUID);
-		return new ResponseEntity<>(ctrResponse, HttpStatus.OK);
+	@RequestMapping(method=RequestMethod.POST, value="/contractInChain", headers="Accept=application/json")
+	public ResponseEntity<?> createContractInChain(@RequestBody FreightContractHeader contract){
+		ResponseEntity<?> response = contractService.createInChain(contract);
+		return response;
 	}  
 		
-	@RequestMapping(method=RequestMethod.PUT, value="updateContractInChain", headers="Accept=application/json")
-	public @ResponseBody ContractResponse updateContractInChain(@RequestBody FreightContractHeader contract){
+	@RequestMapping(method=RequestMethod.PUT, value="/contractInChain", headers="Accept=application/json")
+	public ResponseEntity<?> updateContractInChain(@RequestBody FreightContractHeader contract){
 		String contractUUID = contractService.updateInChain(contract);
 		ContractResponse ctrResponse = new ContractResponse();
 		ctrResponse.setContractUUID(contractUUID);
-		return ctrResponse;
+		return new ResponseEntity<>(ctrResponse, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value="/contractInChain", headers="Accept=application/json")
+	public ResponseEntity<?> getContractInChain(@PathVariable String externalFreightAgreementID){
+		return new ResponseEntity<>(externalFreightAgreementID, HttpStatus.OK);
 	}
 	
 }

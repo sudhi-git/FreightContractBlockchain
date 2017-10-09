@@ -4,43 +4,87 @@ import java.util.Set;
 
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.User;
+import java.io.Serializable;
 
-public class ContractUser implements User{
 
+public class ContractUser implements User, Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	private Enrollment enrollment = null;
+	private String name;
+	private String enrollmentSecret;
+	private String account;
+	private String affiliation;
+	private String mspid;
+	private String org;
+	private Set<String> roles;
+
+	public ContractUser(String name, String org){
+		this.name = name;
+		this.org = org;
+	}
+	
 	@Override
 	public String getAccount() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.account;
 	}
 
 	@Override
 	public String getAffiliation() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.affiliation;
 	}
 
 	@Override
 	public Enrollment getEnrollment() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.enrollment;
 	}
 
 	@Override
 	public String getMspId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.mspid;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
 	@Override
 	public Set<String> getRoles() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.roles;
+	}
+
+	public String getOrg() {
+		return this.org;
+	}
+
+	public void setOrg(String org) {
+		this.org = org;
+	}
+
+	public void setEnrollment(Enrollment enrollment) {
+		this.enrollment = enrollment;
+		S3Store.setUser(this);
+	}
+	
+	public String getEnrollmentSecret() {
+		return enrollmentSecret;
+	}
+
+	public void setEnrollmentSecret(String enrollmentSecret) {
+		this.enrollmentSecret = enrollmentSecret;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setMspid(String mspid) {
+		this.mspid = mspid;
+	}
+	
+	public boolean isRegistered(){
+		return this.enrollment != null;
 	}
 
 }

@@ -13,11 +13,11 @@ public class Config {
 
     private static final Log logger = LogFactory.getLog(Config.class);
 
-    private static final String DEFAULT_CONFIG = "chainconfig.properties";
-    private static final String CHAIN_ID = "com.sudhi.samples.freightcontract.chainid";
+    private static final String DEFAULT_CONFIG = "src/main/resources/chainconfig.properties";
+    private static final String CHANNEL_NAME = "com.sudhi.samples.freightcontract.channel";
     private static final String CHAIN_CODE_NAME = "com.sudhi.samples.freightcontract.chaincodename";
     private static final String CHAIN_CODE_PATH = "com.sudhi.samples.freightcontract.chaincodepath";
-    private static final String ORDERER_CONFIG = "com.sudhi.samples.freightcontract.ordererconfig";
+    private static final String ORDERER_LOCATION = "com.sudhi.samples.freightcontract.ordererlocation";
     private static final String SHIPPER_CONFIG = "com.sudhi.samples.freightcontract.shipperconfig";
     private static final String CARRIER_CONFIG = "com.sudhi.samples.freightcontract.carrierconfig";
     private static final String LSP_CONFIG = "com.sudhi.samples.freightcontract.lspconfig";
@@ -38,15 +38,9 @@ public class Config {
     private static Config config;
     private final static Properties properties = new Properties();
     private Config() {
-        File loadFile = null;
         FileInputStream configProps;
-
         try {
-            loadFile = new File(System.getProperty(DEFAULT_CONFIG))
-                            .getAbsoluteFile();
-            logger.debug(String.format("Loading configuration from %s and it is present: %b", loadFile.toString(),
-                            loadFile.exists()));
-            configProps = new FileInputStream(loadFile);
+            configProps = new FileInputStream(DEFAULT_CONFIG);
             properties.load(configProps);
 
         } catch (IOException e) {
@@ -71,7 +65,8 @@ public class Config {
         return ret;
     }
 
-    private String getProperty(String property, String defaultValue) {
+    @SuppressWarnings("unused")
+	private String getProperty(String property, String defaultValue) {
 
         String ret = properties.getProperty(property, defaultValue);
         return ret;
@@ -90,28 +85,24 @@ public class Config {
         return getProperty(CHAIN_CODE_NAME);
     }
     
-    public String getChainId() {
-        return getProperty(CHAIN_ID);
-    }
-    
     public String getChainCodePath() {
         return getProperty(CHAIN_CODE_PATH);
     }
 
-    public String getOrdererConfig() {
-        return getProperty(ORDERER_CONFIG);
+    public String getOrdererLocation() {
+        return getProperty(ORDERER_LOCATION);
     }
 
-    public String getShipperConfig() {
-        return getProperty(SHIPPER_CONFIG);
+    public String[] getShipperConfig() {
+        return getProperties(SHIPPER_CONFIG);
     }
     
-    public String getCarrierConfig() {
-        return getProperty(CARRIER_CONFIG);
+    public String[] getCarrierConfig() {
+        return getProperties(CARRIER_CONFIG);
     }
     
-    public String getLSPConfig() {
-        return getProperty(LSP_CONFIG);
+    public String[] getLSPConfig() {
+        return getProperties(LSP_CONFIG);
     }
 
     public String getEventAddress() {
@@ -165,4 +156,9 @@ public class Config {
     public String[] getInvokeUpdateArgs() {
     	return getProperties(INVOKE_UPDATE_ARGS);
     }
+
+	public String getChannelName() {
+		return getProperty(CHANNEL_NAME);
+	}
+    
 }
