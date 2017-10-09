@@ -67,7 +67,7 @@ public class BlockchainHelper {
             String mspid = contractOrg.getMspid();
             ca.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
             
-            // Set admin user
+            // Try to set admin user
             //ContractUser admin = new ContractUser("admin", invokeOrg);
             //admin.setEnrollment(ca.enroll("admin", "adminpw"));
             //contractOrg.setAdmin(admin);
