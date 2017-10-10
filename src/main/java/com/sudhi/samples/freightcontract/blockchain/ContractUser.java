@@ -4,6 +4,9 @@ import java.util.Set;
 
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.User;
+
+import io.netty.util.internal.StringUtil;
+
 import java.io.Serializable;
 
 
@@ -22,6 +25,7 @@ public class ContractUser implements User, Serializable{
 	public ContractUser(String name, String org){
 		this.name = name;
 		this.org = org;
+		this.enrollment = new UserEnrollment();
 	}
 	
 	@Override
@@ -84,7 +88,7 @@ public class ContractUser implements User, Serializable{
 	}
 	
 	public boolean isRegistered(){
-		return this.enrollment != null;
+		return !StringUtil.isNullOrEmpty(enrollmentSecret);
 	}
 
 }

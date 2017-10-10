@@ -1,5 +1,6 @@
 package com.sudhi.samples.freightcontract.blockchain;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +24,9 @@ public class InitializeConfig {
 		
 		Properties orgProps = new Properties();
 		orgProps.setProperty("allowAllHostNames", "true");
+		String caFileLoc = "src/main/java/com/sudhi/samples/freightcontract/blockchain/shipperorg-ca.pem";
+		File caFile = new File(caFileLoc);
+		orgProps.setProperty("pemFile", caFile.getAbsolutePath());
 		// Set the Shipper Org configuration
 		OrgObject shipperOrg = new OrgObject();
 		String[] shipperConfig = configObject.getShipperConfig();

@@ -54,7 +54,9 @@ public class S3Store {
 				log.error(e.getMessage());
 			}
 		}else{
-			user = new ContractUser(userName, org);
+			if(user == null){
+				user = new ContractUser(userName, org);
+			}
 		}
 		return user;
 	}

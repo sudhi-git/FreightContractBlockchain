@@ -75,7 +75,8 @@ public class BlockchainHelper {
             // Enroll and set the user who has invoked the blockchain
             ContractUser user = S3Store.getUser("user1", invokeOrg);
             if(!user.isRegistered()){
-                RegistrationRequest rr = new RegistrationRequest(invokeUser, invokeOrg);
+                RegistrationRequest rr = new RegistrationRequest("user1", invokeOrg+".department1");
+                rr.setMaxEnrollments(-1);
                 user.setEnrollmentSecret(ca.register(rr, user));
                 user.setEnrollment(ca.enroll(invokeUser, user.getEnrollmentSecret()));
                 user.setMspid(mspid);
