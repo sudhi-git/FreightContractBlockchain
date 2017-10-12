@@ -1,10 +1,11 @@
 package com.sudhi.samples.freightcontract.blockchain;
 
 import org.hyperledger.fabric.sdk.HFClient;
+import org.hyperledger.fabric.sdk.Orderer;
+import org.hyperledger.fabric.sdk.Peer;
 import org.hyperledger.fabric.sdk.ProposalResponse;
 import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
-import org.hyperledger.fabric_ca.sdk.EnrollmentRequest;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
 import org.slf4j.Logger;
@@ -22,13 +23,11 @@ import org.hyperledger.fabric.sdk.EventHub;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class BlockchainHelper {
 	
     public ResponseEntity<?> createContract(String invokeUser, String invokeOrg, FreightContractHeader contractObject) {
-    	// The SDK client tries to get the user.dir System property. In the case of Spring we are unsure about the same
     	ContractResponse ctrResponse = new ContractResponse();
     	Collection<OrgObject> contractOrgs;
     	OrgObject contractOrg = null;
@@ -64,6 +63,9 @@ public class BlockchainHelper {
         			contractOrg = org;
         		}
         	}
+        	// Get the Solo orderer org
+        	OrgObject ordOrg = contractConfig.getOrderer();
+        	
     		// Setup CA Client
     		HFCAClient ca = contractOrg.getCaClient();
     		
@@ -71,12 +73,14 @@ public class BlockchainHelper {
             ca.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
             
             // Try to set admin user
-            ContractUser admin = new ContractUser("admin", invokeOrg, ca);
-            admin.setEnrollment(ca.enroll("admin", "adminpw"));
-            contractOrg.setAdmin(admin);
+            ContractUser admin = S3Store.getUser("admin", invokeOrg);
+            if(!admin.isRegistered()){
+            	admin.setEnrollment(ca.enroll("admin", "adminpw"));
+                contractOrg.setAdmin(admin);
+            }
             
             // Enroll and set the user who has invoked the blockchain
-            ContractUser user = S3Store.getUser(invokeUser, invokeOrg, ca);
+            ContractUser user = S3Store.getUser(invokeUser, invokeOrg);
             if(!user.isRegistered()){
                 RegistrationRequest rr = new RegistrationRequest(invokeUser, "org1.department1");
                 user.setEnrollmentSecret(ca.register(rr, admin)); //The admin will facilitate the user onboarding
@@ -85,17 +89,25 @@ public class BlockchainHelper {
                 contractOrg.addUser(user);
                 }
             
-            // Construct Channel
+            // Set the peer admin for the channel reconstruction
+            client.setUserContext(contractOrg.getPeerAdmin());
             
-            // Set this user for the transaction proposals
-            client.setUserContext(user);
+            //Reconstruct the channel
+            Channel saptmChannel = client.newChannel(chainConfig.getChannelName());
+            Orderer ord = client.newOrderer(ordOrg.getName(), ordOrg.getOrdererLocation(), ordOrg.getOrgProperties());
+            saptmChannel.addOrderer(ord);
+            for(OrgObject contractPeer:contractConfig.getContractOrgs()){
+                Peer peer = client.newPeer(contractPeer.getName(), contractPeer.getPeerLocation(), contractPeer.getOrgProperties());
+                saptmChannel.addPeer(peer);
+                EventHub eHub = client.newEventHub(contractPeer.getName(), contractPeer.getEventHubLocation(), contractPeer.getOrgProperties());
+                saptmChannel.addEventHub(eHub);
+            }
+            saptmChannel.initialize();
             
-            // Get the channel for this peer
-            Peer peer = new Peer
-            Channel channel = client.queryChannels(peer);
-            
-                	
             // Perform transaction proposal
+            client.setUserContext(user);
+            saptmChannel.setDeployWaitTime(contractConfig.getDEPLOYWAITTIME());
+            saptmChannel.setTransactionWaitTime(contractConfig.getINVOKEWAITTIME());
             TransactionProposalRequest createContract = client.newTransactionProposalRequest();
             createContract.setChaincodeID(chaincodeID);
             createContract.setFcn("createContract");
@@ -108,7 +120,7 @@ public class BlockchainHelper {
 
             createContract.setTransientMap(tm2);
             log.info("Sending create transaction proposal");
-            Collection<ProposalResponse> responses = channel.sendTransactionProposal(createContract);
+            Collection<ProposalResponse> responses = saptmChannel.sendTransactionProposal(createContract);
 
             for (ProposalResponse response : responses) {
                 if (response.getStatus() == ProposalResponse.Status.SUCCESS) {
@@ -128,6 +140,4 @@ public class BlockchainHelper {
     	}
     	return new ResponseEntity<>(ctrResponse, status);
 	}
-    
-    
 }

@@ -4,8 +4,6 @@ import java.util.Set;
 
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.User;
-import org.hyperledger.fabric_ca.sdk.HFCAClient;
-
 import io.netty.util.internal.StringUtil;
 
 import java.io.Serializable;
@@ -22,8 +20,9 @@ public class ContractUser implements User, Serializable{
 	private String mspid;
 	private String org;
 	private Set<String> roles;
+	private boolean isPeerAdmin;
 
-	public ContractUser(String name, String org, HFCAClient caAuth){
+	public ContractUser(String name, String org){
 		this.name = name;
 		this.org = org;
 		this.enrollment = null;
@@ -69,7 +68,9 @@ public class ContractUser implements User, Serializable{
 
 	public void setEnrollment(Enrollment enrollment) {
 		this.enrollment = enrollment;
-		S3Store.setUser(this);
+		if(!isPeerAdmin){
+			S3Store.setUser(this);
+		}
 	}
 	
 	public String getEnrollmentSecret() {
@@ -92,4 +93,11 @@ public class ContractUser implements User, Serializable{
 		return !StringUtil.isNullOrEmpty(enrollmentSecret);
 	}
 
+	public boolean isPeerAdmin() {
+		return isPeerAdmin;
+	}
+
+	public void setPeerAdmin(boolean isPeerAdmin) {
+		this.isPeerAdmin = isPeerAdmin;
+	}
 }

@@ -19,6 +19,14 @@ public class OrgObject {
 	private String domainName;
 	private String caName;
 	private Properties caProperties;
+	private Properties orgProperties;
+	
+	public Properties getOrgProperties() {
+		return orgProperties;
+	}
+	public void setOrgProperties(Properties orgProperties) {
+		this.orgProperties = orgProperties;
+	}
 	public Properties getCaProperties() {
 		return caProperties;
 	}

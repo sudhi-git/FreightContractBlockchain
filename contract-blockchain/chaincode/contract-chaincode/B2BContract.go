@@ -50,6 +50,7 @@ type B2BContract struct{
 	FreightContractUUID	string `json:"FreightContractUUID"`
 	FreightContractID	string `json:"FreightContractID"`
 	ExternalFreightContractID	string `json:"ExternalFreightContractID"`
+	SourceSystem string `json:"SourceSystem"`
 	ContractDescription	string `json:"ContractDescription"`
 	ValidityStart	time.Time `json:"ValidityStart"`
 	ValidityEnd	time.Time `json:"ValidityEnd"`
@@ -62,6 +63,10 @@ type B2BContract struct{
 	Currency string `json:"Currency"`
 	ShippingType string `json:"ShippingType"`
 	ModeOfTransport	string `json:"ModeOfTransport"`
+	CreatedBy string `json:"CreatedBy"`
+	CreatedAt time.Time `json:"CreatedAt"`
+	ChangedBy string `json:"ChangedBy"`
+	ChangedOn time.Time `json:"ChangedOn"`
 	CalculationSheet []B2BContractItems `json:"CalculationSheet"`
 }
 
@@ -105,24 +110,24 @@ func createContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 		fmt.Println("Incorrect number of arguments. Expecting 1")
 		return "", fmt.Errorf("Incorrect number of arguments. Expecting 1")
 	}
-	var contract []B2BContract
+	var contract B2BContract
 	json.Unmarshal([]byte(args[0]), &contract)
-	result, err := APIstub.GetState(contract[0].ExternalFreightContractID)
+	result, err := APIstub.GetState(contract.ExternalFreightContractID)
 	if err != nil{
 		return "", fmt.Errorf("Failed to get state of the ledger. Try after some time")
 	}
 	if result != nil{
-		return "", fmt.Errorf("Contract %s already exists", contract[0].ExternalFreightContractID)
+		return "", fmt.Errorf("Contract %s already exists", contract.ExternalFreightContractID)
 	}
 	contractValue, _ := json.Marshal(contract)
-	createError := APIstub.PutState(contract[0].ExternalFreightContractID, contractValue)
+	createError := APIstub.PutState(contract.ExternalFreightContractID, contractValue)
 	if createError != nil {
-		fmt.Println("Failed to create contract: %s", contract[0].ExternalFreightContractID)
-		return "", fmt.Errorf("Failed to create contract: %s", contract[0].ExternalFreightContractID)
+		fmt.Println("Failed to create contract: %s", contract.ExternalFreightContractID)
+		return "", fmt.Errorf("Failed to create contract: %s", contract.ExternalFreightContractID)
 	}
-	fmt.Println(contract[0].ExternalFreightContractID, "saved successfully")
+	fmt.Println(contract.ExternalFreightContractID, "saved successfully")
 
-	return contract[0].ExternalFreightContractID + "saved", nil
+	return contract.ExternalFreightContractID + "saved", nil
 }
 
 func queryContract(APIstub shim.ChaincodeStubInterface, args []string) (string, error) {
@@ -150,35 +155,35 @@ func updateContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 		fmt.Println("Incorrect number of arguments. Expecting 1")
 		return "", fmt.Errorf("Incorrect number of arguments. Expecting 1")
 	}
-	var contract []B2BContract
+	var contract B2BContract
 	json.Unmarshal([]byte(args[0]), &contract)
-	contractValue, err := APIstub.GetState(contract[0].ExternalFreightContractID)
+	contractValue, err := APIstub.GetState(contract.ExternalFreightContractID)
 	if err != nil {
-		fmt.Println("Failed to get contract: %s", contract[0].ExternalFreightContractID)
-		return "", fmt.Errorf("Failed to get contract: %s. Error: %s", contract[0].ExternalFreightContractID, err)
+		fmt.Println("Failed to get contract: %s", contract.ExternalFreightContractID)
+		return "", fmt.Errorf("Failed to get contract: %s. Error: %s", contract.ExternalFreightContractID, err)
 	}
 	if contractValue == nil {
-		fmt.Println("Failed to get contract: %s", contract[0].ExternalFreightContractID)
-		return "", fmt.Errorf("Contract not found: %s", contract[0].ExternalFreightContractID)
+		fmt.Println("Failed to get contract: %s", contract.ExternalFreightContractID)
+		return "", fmt.Errorf("Contract not found: %s", contract.ExternalFreightContractID)
 	}
 	var contractOld B2BContract
 
 	json.Unmarshal(contractValue, &contractOld)
-	contractOld.ContractDescription = contract[0].ContractDescription
-	contractOld.ValidityStart = contract[0].ValidityStart
-	contractOld.ValidityEnd = contract[0].ValidityEnd
-	contractOld.BP1Id = contract[0].BP1Id
-	contractOld.BP1Role = contract[0].BP1Role
-	contractOld.BP1Desc = contract[0].BP1Desc
-	contractOld.BP2Id = contract[0].BP2Id
-	contractOld.BP2Role = contract[0].BP2Role
-	contractOld.BP2Desc = contract[0].BP2Desc
-	contractOld.Currency = contract[0].Currency
-	contractOld.ShippingType = contract[0].ShippingType
-	contractOld.ModeOfTransport = contract[0].ModeOfTransport
-	contractOld.CalculationSheet = contract[0].CalculationSheet
+	contractOld.ContractDescription = contract.ContractDescription
+	contractOld.ValidityStart = contract.ValidityStart
+	contractOld.ValidityEnd = contract.ValidityEnd
+	contractOld.BP1Id = contract.BP1Id
+	contractOld.BP1Role = contract.BP1Role
+	contractOld.BP1Desc = contract.BP1Desc
+	contractOld.BP2Id = contract.BP2Id
+	contractOld.BP2Role = contract.BP2Role
+	contractOld.BP2Desc = contract.BP2Desc
+	contractOld.Currency = contract.Currency
+	contractOld.ShippingType = contract.ShippingType
+	contractOld.ModeOfTransport = contract.ModeOfTransport
+	contractOld.CalculationSheet = contract.CalculationSheet
 	contractValueUpd, _ := json.Marshal(contract)
-	err = APIstub.PutState(contract[0].ExternalFreightContractID, contractValueUpd)
+	err = APIstub.PutState(contract.ExternalFreightContractID, contractValueUpd)
 
 	if err != nil {
 		fmt.Println("Update of contract %s failed", args[2])

@@ -1,7 +1,6 @@
 package com.sudhi.samples.freightcontract.blockchain;
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -17,7 +16,7 @@ public class Config {
     private static final String CHANNEL_NAME = "com.sudhi.samples.freightcontract.channel";
     private static final String CHAIN_CODE_NAME = "com.sudhi.samples.freightcontract.chaincodename";
     private static final String CHAIN_CODE_PATH = "com.sudhi.samples.freightcontract.chaincodepath";
-    private static final String ORDERER_LOCATION = "com.sudhi.samples.freightcontract.ordererlocation";
+    private static final String ORDERER_CONFIG = "com.sudhi.samples.freightcontract.ordererconfig";
     private static final String SHIPPER_CONFIG = "com.sudhi.samples.freightcontract.shipperconfig";
     private static final String CARRIER_CONFIG = "com.sudhi.samples.freightcontract.carrierconfig";
     private static final String LSP_CONFIG = "com.sudhi.samples.freightcontract.lspconfig";
@@ -88,8 +87,8 @@ public class Config {
         return getProperty(CHAIN_CODE_PATH);
     }
 
-    public String getOrdererLocation() {
-        return getProperty(ORDERER_LOCATION);
+    public String[] getOrdererConfig() {
+        return getProperties(ORDERER_CONFIG);
     }
 
     public String[] getShipperConfig() {

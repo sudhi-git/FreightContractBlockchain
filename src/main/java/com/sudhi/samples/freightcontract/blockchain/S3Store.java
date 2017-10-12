@@ -16,7 +16,8 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.S3Object;
 
 public class S3Store {
-	static final String BUCKET_NAME = "blockchainusers";
+	static final String BUCKET_NAME_USERS = "blockchainusers";
+	static final String BUCKER_NAME_CHANNEL = "blockchainchannels";
 	public static void setUser(ContractUser user){
 		Logger log = LoggerFactory.getLogger(S3Store.class);
 		SystemPropertiesCredentialsProvider credsProvider = new SystemPropertiesCredentialsProvider();
@@ -27,23 +28,23 @@ public class S3Store {
 			ObjectOutputStream obj = new ObjectOutputStream(fileOut);
 			obj.writeObject(user);
 			obj.close();
-			s3Client.putObject(BUCKET_NAME, user.getName(), objOut);
+			s3Client.putObject(BUCKET_NAME_USERS, user.getName(), objOut);
 		}catch(Exception e){
 			log.error(e.getMessage());
 		}		
 	}
 	
-	public static ContractUser getUser(String userName, String org, HFCAClient caAuth){
+	public static ContractUser getUser(String userName, String org){
 		Logger log = LoggerFactory.getLogger(S3Store.class);
 		ContractUser user = null;
 		S3Object s3Object = null;
 		SystemPropertiesCredentialsProvider credsProvider = new SystemPropertiesCredentialsProvider();
 		AmazonS3Client s3Client = new AmazonS3Client(credsProvider);
 		try{
-			s3Object = s3Client.getObject(BUCKET_NAME, userName);
+			s3Object = s3Client.getObject(BUCKET_NAME_USERS, userName);
 		}catch(AmazonS3Exception e){
 			if(e.getStatusCode() == 404){ //Object not found
-				user = new ContractUser(userName, org, caAuth);
+				user = new ContractUser(userName, org);
 			}
 		}
 		if(s3Object!=null){
@@ -56,7 +57,7 @@ public class S3Store {
 			}
 		}else{
 			if(user == null){
-				user = new ContractUser(userName, org, caAuth);
+				user = new ContractUser(userName, org);
 			}
 		}
 		return user;

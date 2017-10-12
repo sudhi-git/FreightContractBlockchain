@@ -1,4 +1,4 @@
-# Blockchain for SAP TM B2B Contracts
+# Blockchain for SAP TM B2B Contracts (Uncontrolled Shipments)
 =================
 
 ## Background
