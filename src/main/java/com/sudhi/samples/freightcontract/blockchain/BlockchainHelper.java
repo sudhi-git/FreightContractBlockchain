@@ -4,6 +4,7 @@ import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.ProposalResponse;
 import org.hyperledger.fabric.sdk.TransactionProposalRequest;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
+import org.hyperledger.fabric_ca.sdk.EnrollmentRequest;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
 
 import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.Channel;
+import org.hyperledger.fabric.sdk.EventHub;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -64,30 +66,36 @@ public class BlockchainHelper {
         	}
     		// Setup CA Client
     		HFCAClient ca = contractOrg.getCaClient();
+    		
             String mspid = contractOrg.getMspid();
             ca.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
             
             // Try to set admin user
-            //ContractUser admin = new ContractUser("admin", invokeOrg);
-            //admin.setEnrollment(ca.enroll("admin", "adminpw"));
-            //contractOrg.setAdmin(admin);
+            ContractUser admin = new ContractUser("admin", invokeOrg, ca);
+            admin.setEnrollment(ca.enroll("admin", "adminpw"));
+            contractOrg.setAdmin(admin);
             
             // Enroll and set the user who has invoked the blockchain
-            ContractUser user = S3Store.getUser("user1", invokeOrg);
+            ContractUser user = S3Store.getUser(invokeUser, invokeOrg, ca);
             if(!user.isRegistered()){
-                RegistrationRequest rr = new RegistrationRequest("user1", invokeOrg+".department1");
-                rr.setMaxEnrollments(-1);
-                user.setEnrollmentSecret(ca.register(rr, user));
-                user.setEnrollment(ca.enroll(invokeUser, user.getEnrollmentSecret()));
+                RegistrationRequest rr = new RegistrationRequest(invokeUser, "org1.department1");
+                user.setEnrollmentSecret(ca.register(rr, admin)); //The admin will facilitate the user onboarding
                 user.setMspid(mspid);
+                user.setEnrollment(ca.enroll(invokeUser, user.getEnrollmentSecret()));
+                contractOrg.addUser(user);
                 }
-            contractOrg.addUser(user);
             
-            // Setup channel
-            Channel channel = client.newChannel(chainConfig.getChannelName());
+            // Construct Channel
+            
+            // Set this user for the transaction proposals
+            client.setUserContext(user);
+            
+            // Get the channel for this peer
+            Peer peer = new Peer
+            Channel channel = client.queryChannels(peer);
+            
                 	
             // Perform transaction proposal
-            client.setUserContext(user);
             TransactionProposalRequest createContract = client.newTransactionProposalRequest();
             createContract.setChaincodeID(chaincodeID);
             createContract.setFcn("createContract");

@@ -6,7 +6,6 @@
 /Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/dto/ContractItems.java
 /Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/controller/FreightContractController.java
 /Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/blockchain/S3Store.java
-/Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/blockchain/UserEnrollment.java
 /Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/FreightContractApiApplication.java
 /Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/blockchain/ConstructArguments.java
 /Users/sudhi_bhat/git/FreightContractAPI/src/main/java/com/sudhi/samples/freightcontract/controller/ContractResponse.java

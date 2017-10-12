@@ -22,7 +22,6 @@ public class Config {
     private static final String CARRIER_CONFIG = "com.sudhi.samples.freightcontract.carrierconfig";
     private static final String LSP_CONFIG = "com.sudhi.samples.freightcontract.lspconfig";
     private static final String EVENT_ADDRESS = "com.sudhi.samples.freightcontract.eventhubaddress";
-    private static final String CA_ADDRESS = "com.sudhi.samples.freightcontract.caaddress";
     private static final String USER_NAME = "com.sudhi.samples.freightcontract.username";
     private static final String USER_PWD = "com.sudhi.samples.freightcontract.userpwd";
     private static final String KEYSTORE_PROPERTIES = "com.sudhi.samples.freightcontract.keystore_properties";
@@ -107,10 +106,6 @@ public class Config {
 
     public String getEventAddress() {
         return getProperty(EVENT_ADDRESS);
-    }
-
-    public String getCaAddress() {
-        return getProperty(CA_ADDRESS);
     }
 
     public int getDeployWaittime() {

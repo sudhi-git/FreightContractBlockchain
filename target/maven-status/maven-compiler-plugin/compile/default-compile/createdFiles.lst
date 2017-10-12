@@ -16,5 +16,4 @@ com/sudhi/samples/freightcontract/blockchain/S3Store.class
 com/sudhi/samples/freightcontract/controller/FreightContractController.class
 com/sudhi/samples/freightcontract/controller/HomeController.class
 com/sudhi/samples/freightcontract/blockchain/ContractUser.class
-com/sudhi/samples/freightcontract/blockchain/UserEnrollment.class
 com/sudhi/samples/freightcontract/controller/ContractResponse.class

@@ -1,0 +1,84 @@
+version: '2'
+
+services:
+
+  orderer.saptm.com:
+    container_name: orderer.saptm.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/saptm.com/orderers/orderer.saptm.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/saptm.com/orderers/orderer.saptm.com/tls/:/var/hyperledger/orderer/tls
+    ports:
+      - 7050:7050
+
+  peer0.shipperorg.saptm.com:
+    container_name: peer0.shipperorg.saptm.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.shipperorg.saptm.com
+      - CORE_PEER_ADDRESS=peer0.shipperorg.saptm.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.shipperorg.saptm.com:7051
+      - CORE_PEER_LOCALMSPID=ShipperOrgMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/shipperorg.saptm.com/peers/peer0.shipperorg.saptm.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/shipperorg.saptm.com/peers/peer0.shipperorg.saptm.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer0.carrierorg.saptm.com:
+    container_name: peer0.carrierorg.saptm.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.carrierorg.saptm.com
+      - CORE_PEER_ADDRESS=peer0.carrierorg.saptm.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.carrierorg.saptm.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.carrierorg.saptm.com:7051
+      - CORE_PEER_LOCALMSPID=CarrierOrgMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/carrierorg.saptm.com/peers/peer0.carrierorg.saptm.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/carrierorg.saptm.com/peers/peer0.carrierorg.saptm.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer0.lsporg.saptm.com:
+    container_name: peer0.lsporg.saptm.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.lsporg.saptm.com
+      - CORE_PEER_ADDRESS=peer0.lsporg.saptm.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.lsporg.saptm.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.lsporg.saptm.com:7051
+      - CORE_PEER_LOCALMSPID=LSPOrgMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/lsporg.saptm.com/peers/peer0.lsporg.saptm.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/lsporg.saptm.com/peers/peer0.lsporg.saptm.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 9051:7051
+      - 9053:7053

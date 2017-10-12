@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class S3Store {
 		}		
 	}
 	
-	public static ContractUser getUser(String userName, String org){
+	public static ContractUser getUser(String userName, String org, HFCAClient caAuth){
 		Logger log = LoggerFactory.getLogger(S3Store.class);
 		ContractUser user = null;
 		S3Object s3Object = null;
@@ -42,7 +43,7 @@ public class S3Store {
 			s3Object = s3Client.getObject(BUCKET_NAME, userName);
 		}catch(AmazonS3Exception e){
 			if(e.getStatusCode() == 404){ //Object not found
-				user = new ContractUser(userName, org);
+				user = new ContractUser(userName, org, caAuth);
 			}
 		}
 		if(s3Object!=null){
@@ -55,7 +56,7 @@ public class S3Store {
 			}
 		}else{
 			if(user == null){
-				user = new ContractUser(userName, org);
+				user = new ContractUser(userName, org, caAuth);
 			}
 		}
 		return user;

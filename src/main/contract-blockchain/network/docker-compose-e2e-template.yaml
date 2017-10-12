@@ -1,0 +1,87 @@
+version: '2'
+
+networks:
+  saptmn:
+services:
+  ca0:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-shipperorg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.shipperorg.saptm.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -n ca0 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.shipperorg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/shipperorg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerOrg1
+    networks:
+      - saptmn
+
+  ca1:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-carrierorg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.carrierorg.saptm.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -n ca0 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.carrierorg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/carrierorg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerOrg2
+    networks:
+      - saptmn
+
+  ca2:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-lsporg
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.lsporg.saptm.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -n ca0 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.lsporg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/carrierorg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerOrg3
+    networks:
+      - saptmn
+      
+  orderer.saptm.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.saptm.com
+    container_name: orderer.saptm.com
+    networks:
+      - saptmn
+
+  peer0.shipperorg.saptm.com:
+    container_name: peer0.shipperorg.saptm.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.shipperorg.saptm.com
+    networks:
+      - saptmn
+
+  peer0.carrierorg.saptm.com:
+    container_name: peer0.carrierorg.saptm.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.carrierorg.saptm.com
+    networks:
+      - saptmn
+
+  peer0.lsporg.saptm.com:
+    container_name: peer0.lsporg.saptm.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.lsporg.saptm.com
+    networks:
+      - saptmn

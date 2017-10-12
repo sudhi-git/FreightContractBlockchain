@@ -1,12 +1,9 @@
 package com.sudhi.samples.freightcontract.blockchain;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Properties;
-
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException;
 import org.slf4j.Logger;
@@ -22,11 +19,6 @@ public class InitializeConfig {
 		Logger log = LoggerFactory.getLogger(InitializeConfig.class);
 		Config configObject = Config.getConfig();
 		
-		Properties orgProps = new Properties();
-		orgProps.setProperty("allowAllHostNames", "true");
-		String caFileLoc = "src/main/java/com/sudhi/samples/freightcontract/blockchain/shipperorg-ca.pem";
-		File caFile = new File(caFileLoc);
-		orgProps.setProperty("pemFile", caFile.getAbsolutePath());
 		// Set the Shipper Org configuration
 		OrgObject shipperOrg = new OrgObject();
 		String[] shipperConfig = configObject.getShipperConfig();
@@ -38,7 +30,6 @@ public class InitializeConfig {
 		shipperOrg.setCaLocation(shipperConfig[4].trim());
 		shipperOrg.setDomainName(shipperConfig[5].trim());
 		shipperOrg.setEventHubLocation(shipperConfig[6].trim());
-		shipperOrg.setCaProperties(orgProps);
 		try {
 			shipperOrg.setCaClient(HFCAClient.createNewInstance(shipperOrg.getCaName(), shipperOrg.getCaLocation(), shipperOrg.getCaProperties()));
 		} catch (MalformedURLException e) {
@@ -59,7 +50,6 @@ public class InitializeConfig {
 		carrierOrg.setCaLocation(carrierConfig[4].trim());
 		carrierOrg.setDomainName(carrierConfig[5].trim());
 		carrierOrg.setEventHubLocation(carrierConfig[6].trim());
-		carrierOrg.setCaProperties(orgProps);
 		try {
 			carrierOrg.setCaClient(HFCAClient.createNewInstance(carrierOrg.getCaName(), carrierOrg.getCaLocation(), carrierOrg.getCaProperties()));
 		} catch (MalformedURLException e) {
@@ -80,7 +70,6 @@ public class InitializeConfig {
 		LSPOrg.setCaLocation(LSPConfig[4].trim());
 		LSPOrg.setDomainName(LSPConfig[5].trim());
 		LSPOrg.setEventHubLocation(LSPConfig[6].trim());
-		LSPOrg.setCaProperties(orgProps);
 		try {
 			LSPOrg.setCaClient(HFCAClient.createNewInstance(LSPOrg.getCaName(), LSPOrg.getCaLocation(), LSPOrg.getCaProperties()));
 		} catch (MalformedURLException e) {

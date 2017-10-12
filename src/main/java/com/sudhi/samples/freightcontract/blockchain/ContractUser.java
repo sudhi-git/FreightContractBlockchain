@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.hyperledger.fabric.sdk.Enrollment;
 import org.hyperledger.fabric.sdk.User;
+import org.hyperledger.fabric_ca.sdk.HFCAClient;
 
 import io.netty.util.internal.StringUtil;
 
@@ -22,10 +23,10 @@ public class ContractUser implements User, Serializable{
 	private String org;
 	private Set<String> roles;
 
-	public ContractUser(String name, String org){
+	public ContractUser(String name, String org, HFCAClient caAuth){
 		this.name = name;
 		this.org = org;
-		this.enrollment = new UserEnrollment();
+		this.enrollment = null;
 	}
 	
 	@Override
