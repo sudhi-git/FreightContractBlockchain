@@ -1,2 +1,4 @@
 src/main/java/com/sudhi/samples/freightcontract/blockchain/S3PropertyStore.java
-target/*
+target
+*.class
+.classpath
