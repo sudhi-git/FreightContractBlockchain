@@ -1,10 +1,10 @@
 package com.sudhi.samples.freightcontract.dto;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.joda.time.DateTime;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -15,13 +15,17 @@ public class FreightContractHeader {
 	@JsonProperty("FreightContractID")
 	private String freightContractID;
 	@JsonProperty("ExternalFreightContractID")
-	private String extFreightContractID;	
+	private String extFreightContractID;
+	@JsonProperty("SourceSystem")
+	private String sourceSystem;
 	@JsonProperty("ContractDescription")
 	private String contractDescription;
 	@JsonProperty("ValidityStart")
-	private DateTime validityStart;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+	private Date validityStart;
 	@JsonProperty("ValidityEnd")
-	private DateTime validityEnd;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+	private Date validityEnd;
 	@JsonProperty("BP1Id")
 	private String bp1Id;
 	@JsonProperty("BP1Role")
@@ -40,8 +44,19 @@ public class FreightContractHeader {
 	private String shippingType;
 	@JsonProperty("ModeOfTransport")
 	private String MoT;
+	@JsonProperty("CreatedBy")
+	private String createdBy;
+	@JsonProperty("CreatedOn")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+	private Date createdOn;
+	@JsonProperty("ChangedBy")
+	private String changedBy;
+	@JsonProperty("ChangedOn")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+	private Date changedOn;
 	@JsonProperty("CalculationSheet")
 	private List<ContractItems> items;
+	@ApiModelProperty(value = "Freight Contract UUID", example = "fe6fe96b-05c3-4370-8d3f-ca36416a78e1")
 	public String getFreightContractUUID() {
 		return freightContractUUID;
 	}
@@ -66,18 +81,18 @@ public class FreightContractHeader {
 	public void setContractDescription(String contractDescription) {
 		this.contractDescription = contractDescription;
 	}
-	@ApiModelProperty(value = "Validity start date of the contract", example="20170917T19:42:00Z")
-	public DateTime getValidityStart() {
+	@ApiModelProperty(value = "Validity start date of the contract", example="2017-09-17T19:42:00Z")
+	public Date getValidityStart() {
 		return validityStart;
 	}
-	public void setValidityStart(DateTime validityStart) {
+	public void setValidityStart(Date validityStart) {
 		this.validityStart = validityStart;
 	}
-	@ApiModelProperty(value = "Validity end date of the contract", example="20180917T19:42:00Z")
-	public DateTime getValidityEnd() {
+	@ApiModelProperty(value = "Validity end date of the contract", example="2018-09-17T19:42:00Z")
+	public Date getValidityEnd() {
 		return validityEnd;
 	}
-	public void setValidityEnd(DateTime validityEnd) {
+	public void setValidityEnd(Date validityEnd) {
 		this.validityEnd = validityEnd;
 	}
 	@ApiModelProperty(value = "Originator of the contract", example="BP1")
@@ -115,15 +130,6 @@ public class FreightContractHeader {
 	public void setMoT(String moT) {
 		MoT = moT;
 	}
-	public List<ContractItems> getItems() {
-		return items;
-	}
-	public void setItems(List<ContractItems> items) {
-		this.items = items;
-	}
-	public FreightContractHeader() {
-		super();
-	}
 	@ApiModelProperty(value = "Role of contract originator business partner", example="OrderingParty")
 	public String getBp1Role() {
 		return bp1Role;
@@ -159,5 +165,48 @@ public class FreightContractHeader {
 	public void setExtFreightContractID(String extFreightContractID) {
 		this.extFreightContractID = extFreightContractID;
 	}
-	
+	@ApiModelProperty(value = "Source System of the agreement", example="C5VCLNT001")
+	public String getSourceSystem() {
+		return sourceSystem;
+	}
+	public void setSourceSystem(String sourceSystem) {
+		this.sourceSystem = sourceSystem;
+	}
+	@ApiModelProperty(value = "Admin Data: Created By User", example="CHANDRASHEKS")
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	@ApiModelProperty(value = "Admin Data: Contract creation date", example="2017-09-02T19:42:00Z")
+	public Date getCreatedOn() {
+		return createdOn;
+	}
+	public void setCreatedOn(Date createdOn) {
+		this.createdOn = createdOn;
+	}
+	@ApiModelProperty(value = "Admin Data: Changed By User", example="CHANDRASHEKS")
+	public String getChangedBy() {
+		return changedBy;
+	}
+	public void setChangedBy(String changedBy) {
+		this.changedBy = changedBy;
+	}
+	@ApiModelProperty(value = "Admin Data: Contract change date", example="2017-09-14T19:42:00Z")
+	public Date getChangedOn() {
+		return changedOn;
+	}
+	public void setChangedOn(Date changedOn) {
+		this.changedOn = changedOn;
+	}
+	public FreightContractHeader() {
+		super();
+	}
+	public List<ContractItems> getItems() {
+		return items;
+	}
+	public void setItems(List<ContractItems> items) {
+		this.items = items;
+	}	
 }

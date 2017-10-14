@@ -20,7 +20,7 @@ public class ContractUser implements User, Serializable{
 	private String mspid;
 	private String org;
 	private Set<String> roles;
-	private boolean isPeerAdmin;
+	private boolean isPeerUser;
 
 	public ContractUser(String name, String org){
 		this.name = name;
@@ -68,7 +68,7 @@ public class ContractUser implements User, Serializable{
 
 	public void setEnrollment(Enrollment enrollment) {
 		this.enrollment = enrollment;
-		if(!isPeerAdmin){
+		if(!isPeerUser){
 			S3Store.setUser(this);
 		}
 	}
@@ -94,10 +94,14 @@ public class ContractUser implements User, Serializable{
 	}
 
 	public boolean isPeerAdmin() {
-		return isPeerAdmin;
+		return isPeerUser;
 	}
 
-	public void setPeerAdmin(boolean isPeerAdmin) {
-		this.isPeerAdmin = isPeerAdmin;
+	public void setPeerUser(boolean isPeerUser) {
+		this.isPeerUser = isPeerUser;
+	}
+	
+	public void setAffiliation(String affiliation){
+		this.affiliation = affiliation;
 	}
 }

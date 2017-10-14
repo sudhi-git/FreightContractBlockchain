@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
 import static java.lang.String.format;
 
 import org.apache.commons.io.IOUtils;
@@ -48,6 +50,18 @@ public class InitializeConfig {
 			+ "lsporg.saptm.com/users/Admin@lsporg.saptm.com/msp/signcerts/Admin@lsporg.saptm.com-cert.pem";
 	private static String LSP_ADM_KEY_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
 			+ "lsporg.saptm.com/users/Admin@lsporg.saptm.com/msp/keystore";
+	private static String SHIP_USR_CERT_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
+			+ "shipperorg.saptm.com/users/User1@shipperorg.saptm.com/msp/signcerts/User1@shipperorg.saptm.com-cert.pem";
+	private static String SHIP_USR_KEY_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
+			+ "shipperorg.saptm.com/users/User1@shipperorg.saptm.com/msp/keystore";
+	private static String CARR_USR_CERT_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
+			+ "carrierorg.saptm.com/users/User1@carrierorg.saptm.com/msp/signcerts/User1@carrierorg.saptm.com-cert.pem";
+	private static String CARR_USR_KEY_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
+			+ "carrierorg.saptm.com/users/User1@carrierorg.saptm.com/msp/keystore";
+	private static String LSP_USR_CERT_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
+			+ "lsporg.saptm.com/users/User1@lsporg.saptm.com/msp/signcerts/User1@lsporg.saptm.com-cert.pem";
+	private static String LSP_USR_KEY_PATH = "contract-blockchain/network/crypto-config/peerOrganizations/"
+			+ "lsporg.saptm.com/users/User1@lsporg.saptm.com/msp/keystore";
 	private HashMap<String, OrgObject> contractOrgs = new HashMap<>();
 	private static InitializeConfig config;
 	Logger log = LoggerFactory.getLogger(InitializeConfig.class);
@@ -60,7 +74,7 @@ public class InitializeConfig {
 	private InitializeConfig() {
 		// Logging object
 		Logger log = LoggerFactory.getLogger(InitializeConfig.class);
-		Config configObject = Config.getConfig();
+		ContractConfig configObject = ContractConfig.getConfig();
 		
 		// Set the orderer configuration
 		ordOrg = new OrgObject();
@@ -69,10 +83,13 @@ public class InitializeConfig {
 		ordOrg.setOrdererLocation(ordConfig[0].trim());
 		Properties ordOrgProperties = new Properties();
 		File ordCert = Paths.get(ORD_CERT_PATH).toFile();
-		ordOrgProperties.setProperty("pemFile", ordCert.getAbsolutePath());
-		ordOrgProperties.setProperty("hostameOverride", "orderer.saptm.com");
-		ordOrgProperties.setProperty("sslProvider", "openSSL");
-		ordOrgProperties.setProperty("negotiationType", "TLS");
+		ordOrgProperties.put("pemFile", ordCert.getAbsolutePath());
+		ordOrgProperties.put("hostnameOverride", "Orderer");
+		ordOrgProperties.put("sslProvider", "openSSL");
+		ordOrgProperties.put("negotiationType", "TLS");
+		ordOrgProperties.put("grpc.NettyChannelBuilderOption.keepAliveTime", new Object[] {5L, TimeUnit.MINUTES});
+		ordOrgProperties.put("grpc.NettyChannelBuilderOption.keepAliveTimeout", new Object[] {8L, TimeUnit.SECONDS});
+		ordOrgProperties.put("grpc.NettyChannelBuilderOption.keepAliveWithoutCalls", new Object[] {true});
 		ordOrg.setOrgProperties(ordOrgProperties);
 		
 		// Set the Shipper Org configuration
@@ -89,9 +106,10 @@ public class InitializeConfig {
 		Properties shipperOrgProperties = new Properties();
 		File shipperCert = Paths.get(SHIP_CERT_PATH).toFile();
 		shipperOrgProperties.setProperty("pemFile", shipperCert.getAbsolutePath());
-		shipperOrgProperties.setProperty("hostameOverride", "peer0.shipperorg.saptm.com");
+		shipperOrgProperties.setProperty("hostnameOverride", "shipperorg.saptm.com");
 		shipperOrgProperties.setProperty("sslProvider", "openSSL");
 		shipperOrgProperties.setProperty("negotiationType", "TLS");
+		shipperOrgProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
 		shipperOrg.setOrgProperties(shipperOrgProperties);
 		try {
 			shipperOrg.setCaClient(HFCAClient.createNewInstance(shipperOrg.getCaName(), shipperOrg.getCaLocation(), shipperOrg.getCaProperties()));
@@ -102,10 +120,19 @@ public class InitializeConfig {
 		}
 		//Admin of the Shipper Org
 		ContractUser shipperAdmin = new ContractUser(shipperOrg.getName()+"Admin", shipperOrg.getName());
-		shipperAdmin.setPeerAdmin(true);
+		shipperAdmin.setPeerUser(true);
 		shipperAdmin.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(SHIP_ADM_KEY_PATH).toFile()), Paths.get(SHIP_ADM_CERT_PATH).toFile()));
 		shipperAdmin.setMspid(shipperOrg.getMspid());
 		shipperOrg.setPeerAdmin(shipperAdmin);
+		contractOrgs.put("Shipper", shipperOrg);
+		
+		//Transaction user of this Shipper Org. Workaround till I can figure out why the enrolled user does not work :(
+		ContractUser shipperUser = new ContractUser(shipperOrg.getName()+"User", shipperOrg.getName());
+		shipperUser.setPeerUser(true);
+		shipperUser.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(SHIP_USR_KEY_PATH).toFile()), Paths.get(SHIP_USR_CERT_PATH).toFile()));
+		shipperUser.setMspid(shipperOrg.getMspid());
+		shipperOrg.addUser(shipperUser);
+		
 		contractOrgs.put("Shipper", shipperOrg);
 		
 		// Set the Carrier Org configuration
@@ -122,9 +149,10 @@ public class InitializeConfig {
 		Properties carrierOrgProperties = new Properties();
 		File carrierCert = Paths.get(CARR_CERT_PATH).toFile();
 		carrierOrgProperties.setProperty("pemFile", carrierCert.getAbsolutePath());
-		carrierOrgProperties.setProperty("hostameOverride", "peer0.carrierorg.saptm.com");
+		carrierOrgProperties.setProperty("hostnameOverride", "carrierorg.saptm.com");
 		carrierOrgProperties.setProperty("sslProvider", "openSSL");
 		carrierOrgProperties.setProperty("negotiationType", "TLS");
+		//carrierOrgProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
 		carrierOrg.setOrgProperties(carrierOrgProperties);
 		try {
 			carrierOrg.setCaClient(HFCAClient.createNewInstance(carrierOrg.getCaName(), carrierOrg.getCaLocation(), carrierOrg.getCaProperties()));
@@ -135,10 +163,17 @@ public class InitializeConfig {
 		}
 		//Admin of the Carrier Org
 		ContractUser carrierAdmin = new ContractUser(carrierOrg.getName()+"Admin", carrierOrg.getName());
-		carrierAdmin.setPeerAdmin(true);
+		carrierAdmin.setPeerUser(true);
 		carrierAdmin.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(CARR_ADM_KEY_PATH).toFile()), Paths.get(CARR_ADM_CERT_PATH).toFile()));
 		carrierAdmin.setMspid(carrierOrg.getMspid());
 		carrierOrg.setPeerAdmin(carrierAdmin);
+		
+		ContractUser carrierUser = new ContractUser(carrierOrg.getName()+"User", carrierOrg.getName());
+		carrierUser.setPeerUser(true);
+		carrierUser.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(CARR_USR_KEY_PATH).toFile()), Paths.get(CARR_USR_CERT_PATH).toFile()));
+		carrierUser.setMspid(shipperOrg.getMspid());
+		carrierOrg.addUser(carrierUser);
+		
 		contractOrgs.put("Carrier", carrierOrg);
 		
 		// Set the LSP Org configuration
@@ -155,7 +190,7 @@ public class InitializeConfig {
 		Properties LSPOrgProperties = new Properties();
 		File LSPCert = Paths.get(LSP_CERT_PATH).toFile();
 		LSPOrgProperties.setProperty("pemFile", LSPCert.getAbsolutePath());
-		LSPOrgProperties.setProperty("hostameOverride", "peer0.lsporg.saptm.com");
+		LSPOrgProperties.setProperty("hostameOverride", "lsporg.saptm.com");
 		LSPOrgProperties.setProperty("sslProvider", "openSSL");
 		LSPOrgProperties.setProperty("negotiationType", "TLS");
 		LSPOrg.setOrgProperties(LSPOrgProperties);
@@ -168,10 +203,17 @@ public class InitializeConfig {
 		}
 		//Admin of the LSP Org
 		ContractUser lspAdmin = new ContractUser(LSPOrg.getName()+"Admin", LSPOrg.getName());
-		lspAdmin.setPeerAdmin(true);
+		lspAdmin.setPeerUser(true);
 		lspAdmin.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(LSP_ADM_KEY_PATH).toFile()), Paths.get(LSP_ADM_CERT_PATH).toFile()));
 		lspAdmin.setMspid(LSPOrg.getMspid());
 		LSPOrg.setPeerAdmin(lspAdmin);
+		
+		ContractUser LSPUser = new ContractUser(LSPOrg.getName()+"User", LSPOrg.getName());
+		LSPUser.setPeerUser(true);
+		LSPUser.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(LSP_USR_KEY_PATH).toFile()), Paths.get(LSP_USR_CERT_PATH).toFile()));
+		LSPUser.setMspid(LSPOrg.getMspid());
+		LSPOrg.addUser(LSPUser);
+		
 		contractOrgs.put("LSP", LSPOrg);
 	}
 	

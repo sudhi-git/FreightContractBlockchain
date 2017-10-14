@@ -64,9 +64,9 @@ createChannel() {
 setGlobals 0
 
 if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-peer channel create -o orderer.saptm.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx >&log.txt
+peer channel create -o orderer.saptm.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/saptmchannel.tx >&log.txt
 else
-peer channel create -o orderer.saptm.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
+peer channel create -o orderer.saptm.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/saptmchannel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
 fi
 res=$?
 cat log.txt
@@ -135,9 +135,9 @@ setGlobals $PEER
 # while 'peer chaincode' command can get the orderer endpoint from the peer (if join was successful),
 # lets supply it directly as we know it using the "-o" option
 if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-peer chaincode instantiate -o orderer.saptm.com:7050 -C $CHANNEL_NAME -n saptmcc -v 1.0 -c '{"Args":[]}' -P "OR    ('ShipperOrgMSP.member','CarrierOrgMSP.member')" >&log.txt
+peer chaincode instantiate -o orderer.saptm.com:7050 -C $CHANNEL_NAME -n saptmcc -v 1.0 -c '{"Args":[]}' >&log.txt
 else
-peer chaincode instantiate -o orderer.saptm.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n saptmcc -v 1.0 -c '{"Args":[]}' -P "OR    ('ShipperOrgMSP.member','CarrierOrgMSP.member')" >&log.txt
+peer chaincode instantiate -o orderer.saptm.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n saptmcc -v 1.0 -c '{"Args":[]}' >&log.txt
 fi
 res=$?
 cat log.txt

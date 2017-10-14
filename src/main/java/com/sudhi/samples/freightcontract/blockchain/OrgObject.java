@@ -102,5 +102,8 @@ public class OrgObject {
 	public void addUser(ContractUser user){
 		users.put(user.getName(), user);
 	}
+	public ContractUser getUser(String name){
+		return users.get(name);
+	}
 	
 }

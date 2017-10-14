@@ -14,11 +14,15 @@ public class FreightContractService {
 		return response;
 	}
 	
-	public String updateInChain(FreightContractHeader contract){
-		return contract.getFreightContractUUID();
+	public ResponseEntity<?> updateInChain(FreightContractHeader contract){
+		BlockchainHelper hfHelper = new BlockchainHelper();
+		ResponseEntity<?> response = hfHelper.updateContract("CHANDRASHEKS", "CarrierOrg", contract);
+		return response;
 	}
 	
-	public String getContractFromChain(String externalFreightAgreementId){
-		return externalFreightAgreementId;
+	public ResponseEntity<?> getContractFromChain(String externalFreightAgreementId){
+		BlockchainHelper hfHelper = new BlockchainHelper();
+		ResponseEntity<?> response = hfHelper.queryContract("CHANDRASHEKS", "LSPOrg", externalFreightAgreementId);
+		return response;
 	}
 }

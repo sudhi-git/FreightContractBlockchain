@@ -8,9 +8,9 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class Config {
+public class ContractConfig {
 
-    private static final Log logger = LogFactory.getLog(Config.class);
+    private static final Log logger = LogFactory.getLog(ContractConfig.class);
 
     private static final String DEFAULT_CONFIG = "src/main/resources/chainconfig.properties";
     private static final String CHANNEL_NAME = "com.sudhi.samples.freightcontract.channel";
@@ -33,9 +33,9 @@ public class Config {
     private static final String DEPLOY_WAITTIME = "com.sudhi.samples.freightcontract.deploy_waittime";
     private static final String INVOKE_WAITTIME = "com.sudhi.samples.freightcontract.invoke_waittime";
     
-    private static Config config;
+    private static ContractConfig config;
     private final static Properties properties = new Properties();
-    private Config() {
+    private ContractConfig() {
         FileInputStream configProps;
         try {
             configProps = new FileInputStream(DEFAULT_CONFIG);
@@ -46,9 +46,9 @@ public class Config {
         }
     }
     
-    public static Config getConfig() {
+    public static ContractConfig getConfig() {
         if (null == config) {
-            config = new Config();
+            config = new ContractConfig();
         }
         return config;
     }

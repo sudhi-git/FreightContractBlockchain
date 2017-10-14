@@ -2,7 +2,6 @@ package com.sudhi.samples.freightcontract.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,15 +37,14 @@ public class FreightContractController {
 		
 	@RequestMapping(method=RequestMethod.PUT, value="/contractInChain", headers="Accept=application/json")
 	public ResponseEntity<?> updateContractInChain(@RequestBody FreightContractHeader contract){
-		String contractUUID = contractService.updateInChain(contract);
-		ContractResponse ctrResponse = new ContractResponse();
-		ctrResponse.setContractUUID(contractUUID);
-		return new ResponseEntity<>(ctrResponse, HttpStatus.OK);
+		ResponseEntity<?> response = contractService.updateInChain(contract);
+		return response;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/contractInChain", headers="Accept=application/json")
-	public ResponseEntity<?> getContractInChain(@PathVariable String externalFreightAgreementID){
-		return new ResponseEntity<>(externalFreightAgreementID, HttpStatus.OK);
+	@RequestMapping(method=RequestMethod.GET, value="/contractInChain/{FreightAgreementID}", headers="Accept=application/json")
+	public ResponseEntity<?> getContractInChain(@PathVariable("FreightAgreementID") String externalFreightAgreementID){
+		ResponseEntity<?> response = contractService.getContractFromChain(externalFreightAgreementID);
+		return response;
 	}
 	
 }

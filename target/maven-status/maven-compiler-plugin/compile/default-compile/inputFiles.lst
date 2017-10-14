@@ -3,10 +3,10 @@
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/controller/HomeController.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/blockchain/ConstructArguments.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/FreightContractApiApplication.java
+/Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/blockchain/ContractConfig.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/dto/FreightContractHeader.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/blockchain/InitializeConfig.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/blockchain/S3Store.java
-/Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/blockchain/Config.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/blockchain/BlockchainHelper.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/config/SwaggerConfig.java
 /Users/sudhi_bhat/git/FreightContractBlockchain/src/main/java/com/sudhi/samples/freightcontract/dto/CalculationSheetItems.java

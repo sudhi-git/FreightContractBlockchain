@@ -53,7 +53,7 @@ services:
       - CORE_PEER_ID=peer0.carrierorg.saptm.com
       - CORE_PEER_ADDRESS=peer0.carrierorg.saptm.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.carrierorg.saptm.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.carrierorg.saptm.com:7051
+#      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.carrierorg.saptm.com:7051
       - CORE_PEER_LOCALMSPID=CarrierOrgMSP
     volumes:
         - /var/run/:/host/var/run/
@@ -73,7 +73,7 @@ services:
       - CORE_PEER_ID=peer0.lsporg.saptm.com
       - CORE_PEER_ADDRESS=peer0.lsporg.saptm.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.lsporg.saptm.com:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.lsporg.saptm.com:7051
+#      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.lsporg.saptm.com:7051
       - CORE_PEER_LOCALMSPID=LSPOrgMSP
     volumes:
         - /var/run/:/host/var/run/

@@ -64,7 +64,7 @@ type B2BContract struct{
 	ShippingType string `json:"ShippingType"`
 	ModeOfTransport	string `json:"ModeOfTransport"`
 	CreatedBy string `json:"CreatedBy"`
-	CreatedAt time.Time `json:"CreatedAt"`
+	CreatedAt time.Time `json:"CreatedOn"`
 	ChangedBy string `json:"ChangedBy"`
 	ChangedOn time.Time `json:"ChangedOn"`
 	CalculationSheet []B2BContractItems `json:"CalculationSheet"`
@@ -170,8 +170,8 @@ func updateContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 
 	json.Unmarshal(contractValue, &contractOld)
 	contractOld.ContractDescription = contract.ContractDescription
-	contractOld.ValidityStart = contract.ValidityStart
-	contractOld.ValidityEnd = contract.ValidityEnd
+	//contractOld.ValidityStart = contract.ValidityStart
+	//contractOld.ValidityEnd = contract.ValidityEnd
 	contractOld.BP1Id = contract.BP1Id
 	contractOld.BP1Role = contract.BP1Role
 	contractOld.BP1Desc = contract.BP1Desc

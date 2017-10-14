@@ -1,5 +1,7 @@
 package com.sudhi.samples.freightcontract.controller;
 
+import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
+
 public class ContractResponse {
 	
 	private String ContractUUID;
@@ -7,6 +9,7 @@ public class ContractResponse {
 	private String Message;
 	private String txId;
 	private int HTTPStatus;
+	private FreightContractHeader contract;
 	public String getContractUUID() {
 		return ContractUUID;
 	}
@@ -37,6 +40,12 @@ public class ContractResponse {
 	}
 	public void setHTTPStatus(int hTTPStatus) {
 		HTTPStatus = hTTPStatus;
+	}
+	public FreightContractHeader getContract() {
+		return contract;
+	}
+	public void setContract(FreightContractHeader contract) {
+		this.contract = contract;
 	}
 	public ContractResponse() {
 		super();

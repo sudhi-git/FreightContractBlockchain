@@ -244,7 +244,7 @@ echo
 echo "#################################################################"
 echo "### Generating channel configuration transaction 'channel.tx' ###"
 echo "#################################################################"
-configtxgen -profile ThreeOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+configtxgen -profile ThreeOrgsChannel -outputCreateChannelTx ./channel-artifacts/saptmchannel.tx -channelID $CHANNEL_NAME
 if [ "$?" -ne 0 ]; then
 echo "Failed to generate channel configuration transaction..."
 exit 1
