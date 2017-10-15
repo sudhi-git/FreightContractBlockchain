@@ -16,7 +16,7 @@ public class SwaggerConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Freight Contract API for Blockchain enablement")
-            .description("This is Spring Boot enabled REST Endpoints, which accepts the contract/agreement from SAP TM and pushed to Blockchain")
+            .description("This application provides REST Endpoints, which accepts the contract/agreement from SAP TM replicates the contracts to Blockchain")
             .license("")
             .licenseUrl("")
             .termsOfServiceUrl("")
