@@ -16,8 +16,10 @@ public class FreightContractHeader {
 	private String freightContractID;
 	@JsonProperty("ExternalFreightContractID")
 	private String extFreightContractID;
-	@JsonProperty("SourceSystem")
-	private String sourceSystem;
+	@JsonProperty("OriginSystem")
+	private String originSystem;
+	@JsonProperty("ChangeSystem")
+	private String changeSystem;
 	@JsonProperty("ContractDescription")
 	private String contractDescription;
 	@JsonProperty("ValidityStart")
@@ -43,7 +45,7 @@ public class FreightContractHeader {
 	@JsonProperty("ShippingType")
 	private String shippingType;
 	@JsonProperty("ModeOfTransport")
-	private String MoT;
+	private String modeOfTransport;
 	@JsonProperty("CreatedBy")
 	private String createdBy;
 	@JsonProperty("CreatedOn")
@@ -124,11 +126,11 @@ public class FreightContractHeader {
 		this.shippingType = shippingType;
 	}
 	@ApiModelProperty(value = "Mode of transport of the contract", allowableValues="Sea, Land, Air", example="Sea")
-	public String getMoT() {
-		return MoT;
+	public String getModeOfTransport() {
+		return modeOfTransport;
 	}
-	public void setMoT(String moT) {
-		MoT = moT;
+	public void setModeOfTransport(String mot) {
+		modeOfTransport = mot;
 	}
 	@ApiModelProperty(value = "Role of contract originator business partner", example="OrderingParty")
 	public String getBp1Role() {
@@ -165,12 +167,12 @@ public class FreightContractHeader {
 	public void setExtFreightContractID(String extFreightContractID) {
 		this.extFreightContractID = extFreightContractID;
 	}
-	@ApiModelProperty(value = "Source System of the agreement", example="C5VCLNT001")
-	public String getSourceSystem() {
-		return sourceSystem;
+	@ApiModelProperty(value = "Origin System of the agreement", example="C2TCLNT001")
+	public String getOriginSystem() {
+		return originSystem;
 	}
-	public void setSourceSystem(String sourceSystem) {
-		this.sourceSystem = sourceSystem;
+	public void setOriginSystem(String sourceSystem) {
+		this.originSystem = sourceSystem;
 	}
 	@ApiModelProperty(value = "Admin Data: Created By User", example="CHANDRASHEKS")
 	public String getCreatedBy() {
@@ -199,6 +201,13 @@ public class FreightContractHeader {
 	}
 	public void setChangedOn(Date changedOn) {
 		this.changedOn = changedOn;
+	}
+	@ApiModelProperty(value = "System where the contract was last changed", example="C3TCLNT001")
+	public String getChangeSystem() {
+		return changeSystem;
+	}
+	public void setChangeSystem(String changeSystem) {
+		this.changeSystem = changeSystem;
 	}
 	public FreightContractHeader() {
 		super();

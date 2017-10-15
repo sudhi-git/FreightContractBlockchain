@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

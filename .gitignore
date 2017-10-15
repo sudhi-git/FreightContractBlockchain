@@ -2,3 +2,6 @@ src/main/java/com/sudhi/samples/freightcontract/blockchain/S3PropertyStore.java
 target
 *.class
 .classpath
+contract-blockchain/network/crypto-config
+contract-blockchain/network/channel-artifacts/*.tx
+contract-blockchain/network/channel-artifacts/*.block

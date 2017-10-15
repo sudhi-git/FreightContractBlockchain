@@ -84,7 +84,6 @@ CHANNEL_NAME=$CHANNEL_NAME TIMEOUT=$CLI_TIMEOUT DELAY=$CLI_DELAY docker-compose 
 else
 CHANNEL_NAME=$CHANNEL_NAME TIMEOUT=$CLI_TIMEOUT DELAY=$CLI_DELAY docker-compose -f $COMPOSE_FILE up -d 2>&1
 fi
-SLEEP 4
 if [ $? -ne 0 ]; then
 echo "ERROR !!!! Unable to start network"
 docker logs -f cli

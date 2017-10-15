@@ -152,7 +152,7 @@ public class InitializeConfig {
 		carrierOrgProperties.setProperty("hostnameOverride", "carrierorg.saptm.com");
 		carrierOrgProperties.setProperty("sslProvider", "openSSL");
 		carrierOrgProperties.setProperty("negotiationType", "TLS");
-		//carrierOrgProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
+		carrierOrgProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
 		carrierOrg.setOrgProperties(carrierOrgProperties);
 		try {
 			carrierOrg.setCaClient(HFCAClient.createNewInstance(carrierOrg.getCaName(), carrierOrg.getCaLocation(), carrierOrg.getCaProperties()));
@@ -171,7 +171,7 @@ public class InitializeConfig {
 		ContractUser carrierUser = new ContractUser(carrierOrg.getName()+"User", carrierOrg.getName());
 		carrierUser.setPeerUser(true);
 		carrierUser.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(CARR_USR_KEY_PATH).toFile()), Paths.get(CARR_USR_CERT_PATH).toFile()));
-		carrierUser.setMspid(shipperOrg.getMspid());
+		carrierUser.setMspid(carrierOrg.getMspid());
 		carrierOrg.addUser(carrierUser);
 		
 		contractOrgs.put("Carrier", carrierOrg);
@@ -193,6 +193,7 @@ public class InitializeConfig {
 		LSPOrgProperties.setProperty("hostameOverride", "lsporg.saptm.com");
 		LSPOrgProperties.setProperty("sslProvider", "openSSL");
 		LSPOrgProperties.setProperty("negotiationType", "TLS");
+		LSPOrgProperties.put("grpc.NettyChannelBuilderOption.maxInboundMessageSize", 9000000);
 		LSPOrg.setOrgProperties(LSPOrgProperties);
 		try {
 			LSPOrg.setCaClient(HFCAClient.createNewInstance(LSPOrg.getCaName(), LSPOrg.getCaLocation(), LSPOrg.getCaProperties()));

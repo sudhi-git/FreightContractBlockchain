@@ -50,7 +50,8 @@ type B2BContract struct{
 	FreightContractUUID	string `json:"FreightContractUUID"`
 	FreightContractID	string `json:"FreightContractID"`
 	ExternalFreightContractID	string `json:"ExternalFreightContractID"`
-	SourceSystem string `json:"SourceSystem"`
+	OriginSystem string `json:"OriginSystem"`
+	ChangeSystem string `json:"ChangeSystem"`
 	ContractDescription	string `json:"ContractDescription"`
 	ValidityStart	time.Time `json:"ValidityStart"`
 	ValidityEnd	time.Time `json:"ValidityEnd"`
@@ -155,23 +156,24 @@ func updateContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 		fmt.Println("Incorrect number of arguments. Expecting 1")
 		return "", fmt.Errorf("Incorrect number of arguments. Expecting 1")
 	}
+
 	var contract B2BContract
 	json.Unmarshal([]byte(args[0]), &contract)
 	contractValue, err := APIstub.GetState(contract.ExternalFreightContractID)
 	if err != nil {
-		fmt.Println("Failed to get contract: %s", contract.ExternalFreightContractID)
-		return "", fmt.Errorf("Failed to get contract: %s. Error: %s", contract.ExternalFreightContractID, err)
+		fmt.Println("Contract %s does not exist", contract.ExternalFreightContractID)
+		return "", fmt.Errorf("Contract %s does not exist", contract.ExternalFreightContractID)
 	}
-	if contractValue == nil {
-		fmt.Println("Failed to get contract: %s", contract.ExternalFreightContractID)
-		return "", fmt.Errorf("Contract not found: %s", contract.ExternalFreightContractID)
+	if contractValue == nil{
+		return "", fmt.Errorf("Contract %s does not exist", contract.ExternalFreightContractID)
 	}
+
 	var contractOld B2BContract
 
 	json.Unmarshal(contractValue, &contractOld)
 	contractOld.ContractDescription = contract.ContractDescription
-	//contractOld.ValidityStart = contract.ValidityStart
-	//contractOld.ValidityEnd = contract.ValidityEnd
+	contractOld.ValidityStart = contract.ValidityStart
+	contractOld.ValidityEnd = contract.ValidityEnd
 	contractOld.BP1Id = contract.BP1Id
 	contractOld.BP1Role = contract.BP1Role
 	contractOld.BP1Desc = contract.BP1Desc
@@ -181,15 +183,18 @@ func updateContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 	contractOld.Currency = contract.Currency
 	contractOld.ShippingType = contract.ShippingType
 	contractOld.ModeOfTransport = contract.ModeOfTransport
+	contractOld.ChangedBy = contract.ChangedBy
+	contractOld.ChangedOn = contract.ChangedOn
+	contractOld.ChangeSystem = contract.ChangeSystem
 	contractOld.CalculationSheet = contract.CalculationSheet
-	contractValueUpd, _ := json.Marshal(contract)
+	contractValueUpd, _ := json.Marshal(contractOld)
 	err = APIstub.PutState(contract.ExternalFreightContractID, contractValueUpd)
 
 	if err != nil {
-		fmt.Println("Update of contract %s failed", args[2])
-		return "", fmt.Errorf("Update of contract %s failed", args[2])
+		fmt.Println("Update of contract %s failed", contract.ExternalFreightContractID)
+		return "", fmt.Errorf("Update of contract %s failed", contract.ExternalFreightContractID)
 	}
-	return args[2], nil
+	return contract.ExternalFreightContractID + "updated", nil
 }
 
 // main function starts up the chaincode in the container during instantiate

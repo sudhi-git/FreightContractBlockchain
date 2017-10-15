@@ -143,11 +143,13 @@ public class BlockchainHelper {
 	        		status = HttpStatus.INTERNAL_SERVER_ERROR;
 	        	}
 	        }else{
+	        	log.info("Sending create transaction response to Orderer");
 	        	transEvent = fabricChannel.sendTransaction(successful).get();
 	        	fabricResponse.setTxId(transEvent.getTransactionID());
-	        	fabricResponse.setMessage("Contract " + contractObject.getFreightContractID() + " Saved");
+	        	fabricResponse.setMessage("Contract " + contractObject.getFreightContractID() + " saved");
 	        	fabricResponse.setContractUUID(contractObject.getFreightContractUUID());
 	        	fabricResponse.setHTTPStatus(HttpStatus.CREATED.value());
+	        	fabricResponse.setContractID(contractObject.getFreightContractID());
 	        	status = HttpStatus.CREATED;
 	        }
         } catch (InvalidArgumentException e) {
@@ -180,11 +182,8 @@ public class BlockchainHelper {
 	}
     
     public ResponseEntity<?> updateContract(String invokeUser, String invokeOrg, FreightContractHeader contractObject) {
-        byte[] EXPECTED_EVENT_DATA = "!".getBytes(UTF_8);
-        String EXPECTED_EVENT_NAME = "event";
     	String[] fcnArgs = new String[1];
-    	String txId = null;
-        // Initialize HF Client
+    	// Initialize HF Client
         try {
         	initHFC(invokeUser, invokeOrg);
     	
@@ -196,27 +195,34 @@ public class BlockchainHelper {
             updateContract.setFcn("updateContract");
             fcnArgs[0] = ConstructArguments.prepareUpdateParameters(contractObject);
             updateContract.setArgs(fcnArgs);
-            Map<String, byte[]> tm2 = new HashMap<>();
-            tm2.put("HyperLedgerFabric", "TransactionProposalRequest:JavaSDK".getBytes(UTF_8)); //Just some extra junk in transient map
-            tm2.put("method", "TransactionProposalRequest".getBytes(UTF_8));
-            tm2.put("result", ":)".getBytes(UTF_8));  
-            tm2.put(EXPECTED_EVENT_NAME, EXPECTED_EVENT_DATA);
-
-            updateContract.setTransientMap(tm2);
+            updateContract.setProposalWaitTime(120000);
 	        log.info("Sending update transaction proposal");
 	        Collection<ProposalResponse> responses = fabricChannel.sendTransactionProposal(updateContract, fabricChannel.getPeers());
 	        for (ProposalResponse response : responses) {
 	            if (response.getStatus() == ProposalResponse.Status.SUCCESS) {
 	                log.info("Successful transaction proposal response Txid: %s from peer %s", response.getTransactionID(), response.getPeer().getName());
-	                txId = response.getTransactionID();
-	                fabricResponse.setTxId(txId);
-	                status = HttpStatus.OK;
+	                successful.add(response);
 	            } else {
-	                log.error(response.getMessage());
-	                fabricResponse.setMessage(response.getMessage());
-	                fabricResponse.setHTTPStatus(response.getStatus().getStatus());
-	                status = HttpStatus.valueOf(response.getStatus().getStatus());
+	                failed.add(response);
 	            }
+	        }
+	        if(failed.size()>0){
+	        	log.error("Creation of contract failed");
+	        	for(ProposalResponse err:failed){
+	        		fabricResponse.setMessage(err.getMessage());
+	        		fabricResponse.setHTTPStatus(500);
+	        		status = HttpStatus.INTERNAL_SERVER_ERROR;
+	        	}
+	        }else{
+	        	// Send the successful proposal response to the Orderer which will further distribute to other peers
+	        	log.info("Sending update transaction response to Orderer");
+	        	transEvent = fabricChannel.sendTransaction(successful).get();
+	        	fabricResponse.setTxId(transEvent.getTransactionID());
+	        	fabricResponse.setMessage("Contract " + contractObject.getFreightContractID() + " updated");
+	        	fabricResponse.setContractUUID(contractObject.getFreightContractUUID());
+	        	fabricResponse.setHTTPStatus(HttpStatus.OK.value());
+	        	fabricResponse.setContractID(contractObject.getFreightContractID());
+	        	status = HttpStatus.OK;
 	        }
         } catch (InvalidArgumentException e) {
 			log.error(e.getMessage());
@@ -232,6 +238,14 @@ public class BlockchainHelper {
 			fabricResponse.setHTTPStatus(500);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		} catch (TransactionException e) {
+			fabricResponse.setMessage(e.getMessage());
+			fabricResponse.setHTTPStatus(500);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		} catch (InterruptedException e) {
+			fabricResponse.setMessage(e.getMessage());
+			fabricResponse.setHTTPStatus(500);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		} catch (ExecutionException e) {
 			fabricResponse.setMessage(e.getMessage());
 			fabricResponse.setHTTPStatus(500);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -269,8 +283,8 @@ public class BlockchainHelper {
                     String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
                     log.info("Query payload of b from peer %s returned %s", proposalResponse.getPeer().getName(), payload);
                     fabricResponse.setContract(ConstructArguments.mapQueryResult(payload));
-                    fabricResponse.setHTTPStatus(HttpStatus.OK.value());
-                    status = HttpStatus.OK;
+                    fabricResponse.setHTTPStatus(HttpStatus.FOUND.value());
+                    status = HttpStatus.FOUND;
                 }
             }
         } catch (Exception e) {

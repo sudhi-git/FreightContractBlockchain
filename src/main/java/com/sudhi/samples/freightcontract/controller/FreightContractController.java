@@ -41,9 +41,9 @@ public class FreightContractController {
 		return response;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/contractInChain/{FreightAgreementID}", headers="Accept=application/json")
-	public ResponseEntity<?> getContractInChain(@PathVariable("FreightAgreementID") String externalFreightAgreementID){
-		ResponseEntity<?> response = contractService.getContractFromChain(externalFreightAgreementID);
+	@RequestMapping(method=RequestMethod.GET, value="/contractInChain/{System}/{FreightAgreementID}", headers="Accept=application/json")
+	public ResponseEntity<?> getContractInChain(@PathVariable("System") String system, @PathVariable("FreightAgreementID") String externalFreightAgreementID){
+		ResponseEntity<?> response = contractService.getContractFromChain(system, externalFreightAgreementID);
 		return response;
 	}
 	
