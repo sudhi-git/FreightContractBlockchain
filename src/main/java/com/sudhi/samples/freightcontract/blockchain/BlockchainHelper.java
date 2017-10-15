@@ -129,7 +129,7 @@ public class BlockchainHelper {
 	        responses = fabricChannel.sendTransactionProposal(createContract, fabricChannel.getPeers());
 	        for (ProposalResponse response : responses) {
 	            if (response.getStatus() == ProposalResponse.Status.SUCCESS) {
-	                log.info("Successful transaction proposal response Txid: %s from peer %s", response.getTransactionID(), response.getPeer().getName());
+	                log.info("Successful transaction proposal response Txid: " + response.getTransactionID() + "from peer " + response.getPeer().getName());
 	                successful.add(response);
 	            } else {
 	                failed.add(response);
@@ -200,7 +200,7 @@ public class BlockchainHelper {
 	        Collection<ProposalResponse> responses = fabricChannel.sendTransactionProposal(updateContract, fabricChannel.getPeers());
 	        for (ProposalResponse response : responses) {
 	            if (response.getStatus() == ProposalResponse.Status.SUCCESS) {
-	                log.info("Successful transaction proposal response Txid: %s from peer %s", response.getTransactionID(), response.getPeer().getName());
+	                log.info("Successful transaction proposal response Txid: " + response.getTransactionID() + "from peer " + response.getPeer().getName());
 	                successful.add(response);
 	            } else {
 	                failed.add(response);
@@ -281,7 +281,7 @@ public class BlockchainHelper {
                             + ". Was verified : " + proposalResponse.isVerified());
                 } else {
                     String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
-                    log.info("Query payload of b from peer %s returned %s", proposalResponse.getPeer().getName(), payload);
+                    log.info("Query payload of contract from peer " + proposalResponse.getPeer().getName() + " returned " + payload);
                     fabricResponse.setContract(ConstructArguments.mapQueryResult(payload));
                     fabricResponse.setHTTPStatus(HttpStatus.FOUND.value());
                     status = HttpStatus.FOUND;
