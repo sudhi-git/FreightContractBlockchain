@@ -279,6 +279,9 @@ public class BlockchainHelper {
                     log.error("Failed query proposal from peer " + proposalResponse.getPeer().getName() + " status: " + proposalResponse.getStatus() +
                             ". Messages: " + proposalResponse.getMessage()
                             + ". Was verified : " + proposalResponse.isVerified());
+                    fabricResponse.setMessage(proposalResponse.getMessage());
+                    fabricResponse.setHTTPStatus(HttpStatus.NOT_FOUND.value());
+                    status = HttpStatus.NOT_FOUND;
                 } else {
                     String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
                     log.info("Query payload of contract from peer " + proposalResponse.getPeer().getName() + " returned " + payload);
