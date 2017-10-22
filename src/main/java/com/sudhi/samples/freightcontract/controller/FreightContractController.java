@@ -3,7 +3,6 @@ package com.sudhi.samples.freightcontract.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -42,8 +41,8 @@ public class FreightContractController {
 		return response;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/contractInChain/{System}", headers="Accept=application/json")
-	public ResponseEntity<?> getContractInChain(@PathVariable("System") String system, @RequestParam(value="ExtFAId", required = true) String externalFreightAgreementID){
+	@RequestMapping(method=RequestMethod.GET, value="/contractInChain", headers="Accept=application/json")
+	public ResponseEntity<?> getContractInChain(@RequestParam("System") String system, @RequestParam(value="ExtFAId", required = true) String externalFreightAgreementID){
 		ResponseEntity<?> response = contractService.getContractFromChain(system, externalFreightAgreementID);
 		return response;
 	}
