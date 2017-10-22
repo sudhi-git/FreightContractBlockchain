@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
@@ -41,8 +42,8 @@ public class FreightContractController {
 		return response;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, value="/contractInChain/{System}/{FreightAgreementID}", headers="Accept=application/json")
-	public ResponseEntity<?> getContractInChain(@PathVariable("System") String system, @PathVariable("FreightAgreementID") String externalFreightAgreementID){
+	@RequestMapping(method=RequestMethod.GET, value="/contractInChain/{System}", headers="Accept=application/json")
+	public ResponseEntity<?> getContractInChain(@PathVariable("System") String system, @RequestParam(value="ExtFAId", required = true) String externalFreightAgreementID){
 		ResponseEntity<?> response = contractService.getContractFromChain(system, externalFreightAgreementID);
 		return response;
 	}
