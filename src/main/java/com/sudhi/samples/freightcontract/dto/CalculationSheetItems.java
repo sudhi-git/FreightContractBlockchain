@@ -32,7 +32,7 @@ public class CalculationSheetItems {
 	@JsonProperty("calculationBase")
 	private String calcBase;
 	@JsonProperty("priceUnit")
-	private double priceUnit;
+	private String priceUnit;
 	@JsonProperty("priceUnitUoM")
 	private String priceUnitUom;
 	@JsonProperty("resolutionBase")
@@ -131,10 +131,10 @@ public class CalculationSheetItems {
 		this.calcBase = calcBase;
 	}
 	@ApiModelProperty(value = "Quantity of the calculation base in the calculation rule", example = "100")
-	public double getPriceUnit() {
+	public String getPriceUnit() {
 		return priceUnit;
 	}
-	public void setPriceUnit(double priceUnit) {
+	public void setPriceUnit(String priceUnit) {
 		this.priceUnit = priceUnit;
 	}
 	@ApiModelProperty(value = "Quantity Unit of Measure of the calculation base in the calculation rule", example = "KG")
