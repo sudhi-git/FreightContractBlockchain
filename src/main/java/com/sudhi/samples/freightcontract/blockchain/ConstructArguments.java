@@ -18,6 +18,7 @@ public class ConstructArguments {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			parameters = mapper.writeValueAsString(contractObj);
+			log.info(parameters);
 		} catch (JsonProcessingException e) {
 			log.error(e.getMessage());
 		}
