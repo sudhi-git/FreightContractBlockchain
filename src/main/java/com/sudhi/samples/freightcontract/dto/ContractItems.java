@@ -7,19 +7,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 public class ContractItems {
-	@JsonProperty("FreightContractId")
+	@JsonProperty("freightContractId")
 	private String freightContractId;
-	@JsonProperty("FreightContractUUID")
+	@JsonProperty("freightContractUUID")
 	private String freightContractUUID;
-	@JsonProperty("ItemUUID")
+	@JsonProperty("itemUUID")
 	private String itemUUID;
-	@JsonProperty("ItemId")
+	@JsonProperty("itemId")
 	private String itemId;
-	@JsonProperty("StageType")
+	@JsonProperty("stageType")
 	private String stageType;
-	@JsonProperty("ShippingType")
+	@JsonProperty("shippingType")
 	private String shippingType;
-	@JsonProperty("CalcSheetItems")
+	@JsonProperty("calcSheetItems")
 	private List<CalculationSheetItems> items;
 	@ApiModelProperty(value = "Contract ID to which the contract item belongs to", example="Contract123")
 	public String getFreightContractId() {

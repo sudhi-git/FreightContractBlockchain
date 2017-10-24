@@ -10,53 +10,53 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 public class FreightContractHeader {
-	@JsonProperty("FreightContractUUID")
+	@JsonProperty("freightContractUUID")
 	private String freightContractUUID;
-	@JsonProperty("FreightContractID")
+	@JsonProperty("freightContractID")
 	private String freightContractID;
-	@JsonProperty("ExternalFreightContractID")
+	@JsonProperty("externalFreightContractID")
 	private String extFreightContractID;
-	@JsonProperty("OriginSystem")
+	@JsonProperty("originSystem")
 	private String originSystem;
-	@JsonProperty("ChangeSystem")
+	@JsonProperty("changeSystem")
 	private String changeSystem;
-	@JsonProperty("ContractDescription")
+	@JsonProperty("contractDescription")
 	private String contractDescription;
-	@JsonProperty("ValidityStart")
+	@JsonProperty("validityStart")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
 	private Date validityStart;
-	@JsonProperty("ValidityEnd")
+	@JsonProperty("validityEnd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
 	private Date validityEnd;
-	@JsonProperty("BP1Id")
+	@JsonProperty("bP1Id")
 	private String bp1Id;
-	@JsonProperty("BP1Role")
+	@JsonProperty("bP1Role")
 	private String bp1Role;	
-	@JsonProperty("BP1Desc")
+	@JsonProperty("bP1Desc")
 	private String bp1Desc;	
-	@JsonProperty("BP2Id")
+	@JsonProperty("bP2Id")
 	private String bp2Id;
-	@JsonProperty("BP2Role")
+	@JsonProperty("bP2Role")
 	private String bp2Role;
-	@JsonProperty("BP2Desc")
+	@JsonProperty("bP2Desc")
 	private String bp2Desc;	
-	@JsonProperty("Currency")
+	@JsonProperty("currency")
 	private String currency;
-	@JsonProperty("ShippingType")
+	@JsonProperty("shippingType")
 	private String shippingType;
-	@JsonProperty("ModeOfTransport")
+	@JsonProperty("modeOfTransport")
 	private String modeOfTransport;
-	@JsonProperty("CreatedBy")
+	@JsonProperty("createdBy")
 	private String createdBy;
-	@JsonProperty("CreatedOn")
+	@JsonProperty("createdOn")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
 	private Date createdOn;
-	@JsonProperty("ChangedBy")
+	@JsonProperty("changedBy")
 	private String changedBy;
-	@JsonProperty("ChangedOn")
+	@JsonProperty("changedOn")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
 	private Date changedOn;
-	@JsonProperty("CalculationSheet")
+	@JsonProperty("calculationSheet")
 	private List<ContractItems> items;
 	@ApiModelProperty(value = "Freight Contract UUID", example = "fe6fe96b-05c3-4370-8d3f-ca36416a78e1")
 	public String getFreightContractUUID() {

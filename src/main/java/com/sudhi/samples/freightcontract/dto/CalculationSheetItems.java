@@ -5,39 +5,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
 public class CalculationSheetItems {
-	@JsonProperty("ItemUUID")
+	@JsonProperty("itemUUID")
 	private String itemUUID;
-	@JsonProperty("ItemID")
+	@JsonProperty("itemID")
 	private String itemId;
-	@JsonProperty("ChargeType")
+	@JsonProperty("chargeType")
 	private String chargeType;
-	@JsonProperty("InstructionCode")
+	@JsonProperty("instructionCode")
 	private String insCode;
-	@JsonProperty("OperationCode")
+	@JsonProperty("operationCode")
 	private String opCode;
-	@JsonProperty("ParentItemUUID")
+	@JsonProperty("parentItemUUID")
 	private String parentItemUUID;
-	@JsonProperty("RateAmount")
+	@JsonProperty("rateAmount")
 	private double rateAmount;
-	@JsonProperty("RateCurrency")
+	@JsonProperty("rateCurrency")
 	private String rateCurrency;
-	@JsonProperty("MinAmount")
+	@JsonProperty("minAmount")
 	private double minAmount;
-	@JsonProperty("MinCurrency")
+	@JsonProperty("minCurrency")
 	private String minCurrency;	
-	@JsonProperty("MaxAmount")
+	@JsonProperty("maxAmount")
 	private double maxAmount;
-	@JsonProperty("MaxCurrency")
+	@JsonProperty("maxCurrency")
 	private String maxCurrency;
-	@JsonProperty("CalculationBase")
+	@JsonProperty("calculationBase")
 	private String calcBase;
-	@JsonProperty("PriceUnit")
+	@JsonProperty("priceUnit")
 	private double priceUnit;
-	@JsonProperty("PriceUnitUoM")
+	@JsonProperty("priceUnitUoM")
 	private String priceUnitUom;
-	@JsonProperty("ResolutionBase")
+	@JsonProperty("resolutionBase")
 	private String resBase;
-	@JsonProperty("CalculationMethod")
+	@JsonProperty("calculationMethod")
 	private String calcMethod;
 	@ApiModelProperty(value = "Item UUID of the contract item", example = "46c504e4-20a0-4de9-9705-2d66cb75c6bd")
 	public String getItemUUID() {
