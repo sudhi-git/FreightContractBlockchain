@@ -1,9 +1,11 @@
 package com.sudhi.samples.freightcontract.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sudhi.samples.freightcontract.blockchain.BlockchainHelper;
+import com.sudhi.samples.freightcontract.controller.ContractResponse;
 import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
 
 import org.slf4j.Logger;
@@ -19,9 +21,16 @@ public class FreightContractService {
 	private final String SHIPPER_SYS = "C2TCLNT001";
 	private final String CARRIER_SYS = "C3TCLNT001";
 	private final String LSP_SYS = "C4VCLNT001";
+	private ContractResponse responseError = new ContractResponse();
 	public ResponseEntity<?> createInChain(FreightContractHeader contract){
 		BlockchainHelper hfHelper = new BlockchainHelper();
 		String invokeOrg = null;
+		if(contract==null) {
+			log.error("Payload Empty");
+			responseError.setHTTPStatus(HttpStatus.BAD_REQUEST.value());
+			responseError.setMessage("Payload Empty");
+			return new ResponseEntity<>(responseError, HttpStatus.BAD_REQUEST);
+		}
 		log.info(contract.toString());
 		log.info(contract.getOriginSystem());
 		switch (contract.getOriginSystem()) {
