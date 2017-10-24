@@ -117,7 +117,7 @@ func (s *SmartContract) createContract(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error("Contract " + contract.ExternalFreightContractID + " already exists", )
 	}
 	contractValue, _ := json.Marshal(contract)
-	createError := APIstub.PutState(contract.ExternalFreightContractID, args)
+	createError := APIstub.PutState(contract.ExternalFreightContractID, contractValue)
 	if createError != nil {
 		fmt.Println("Failed to create contract: %s", contract.ExternalFreightContractID)
 		return shim.Error("Failed to create contract: " + contract.ExternalFreightContractID)
