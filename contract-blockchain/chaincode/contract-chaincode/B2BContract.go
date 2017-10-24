@@ -147,7 +147,7 @@ func queryContract(APIstub shim.ChaincodeStubInterface, args []string) (string, 
 		fmt.Println("Failed to get contract: %s", args[0])
 		return "", fmt.Errorf("Contract not found: %s", args[0])
 	}
-	return string(contractValue), nil
+	return contractValue, nil
 }
 
 func updateContract(APIstub shim.ChaincodeStubInterface, args []string) (string, error) {
