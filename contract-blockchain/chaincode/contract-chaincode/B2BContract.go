@@ -140,7 +140,7 @@ func (s *SmartContract) queryContract(APIstub shim.ChaincodeStubInterface, args 
 	}
 	if contractValue == nil {
 		fmt.Println("Failed to get contract: %s", args[0])
-		return shim.Error("Contract not found: %s" + args[0])
+		return shim.Error("Contract not found: " + args[0])
 	}
 	return shim.Success(contractValue)
 }
@@ -169,12 +169,12 @@ func (s *SmartContract) updateContract(APIstub shim.ChaincodeStubInterface, args
 	contractOld.ContractDescription = contract.ContractDescription
 	contractOld.ValidityStart = contract.ValidityStart
 	contractOld.ValidityEnd = contract.ValidityEnd
-	contractOld.BP1Id = contract.BP1Id
-	contractOld.BP1Role = contract.BP1Role
-	contractOld.BP1Desc = contract.BP1Desc
-	contractOld.BP2Id = contract.BP2Id
-	contractOld.BP2Role = contract.BP2Role
-	contractOld.BP2Desc = contract.BP2Desc
+	//contractOld.BP1Id = contract.BP1Id
+	//contractOld.BP1Role = contract.BP1Role
+	//contractOld.BP1Desc = contract.BP1Desc
+	//contractOld.BP2Id = contract.BP2Id
+	//contractOld.BP2Role = contract.BP2Role
+	//contractOld.BP2Desc = contract.BP2Desc
 	contractOld.Currency = contract.Currency
 	contractOld.ShippingType = contract.ShippingType
 	contractOld.ModeOfTransport = contract.ModeOfTransport
