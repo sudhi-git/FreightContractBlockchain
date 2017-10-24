@@ -21,11 +21,11 @@ type CalculationSheetItems struct{
 	InstructionCode	string `json:"instructionCode"`
 	OperationCode	string `json:"operationCode"`
 	ParentItemUUID string `json:"parentItemUUID"`
-	RateAmount float32 `json:"rateAmount"`
+	RateAmount string `json:"rateAmount"`
 	RateCurrency string `json:"rateCurrency"`
-	MinAmount	float32 `json:"minAmount"`
+	MinAmount	string `json:"minAmount"`
 	MinCurrency	string `json:"minCurrency"`
-	MaxAmount	float32 `json:"maxAmount"`
+	MaxAmount	string `json:"maxAmount"`
 	MaxCurrency	string `json:"maxCurrency"`
 	CalculationBase string `json:"calculationBase"`
 	PriceUnit	string `json:"priceUnit"`
@@ -117,7 +117,7 @@ func (s *SmartContract) createContract(APIstub shim.ChaincodeStubInterface, args
 		return shim.Error("Contract " + contract.ExternalFreightContractID + " already exists", )
 	}
 	contractValue, _ := json.Marshal(contract)
-	createError := APIstub.PutState(contract.ExternalFreightContractID, contractValue)
+	createError := APIstub.PutState(contract.ExternalFreightContractID, args)
 	if createError != nil {
 		fmt.Println("Failed to create contract: %s", contract.ExternalFreightContractID)
 		return shim.Error("Failed to create contract: " + contract.ExternalFreightContractID)

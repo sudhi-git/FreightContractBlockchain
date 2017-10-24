@@ -18,15 +18,15 @@ public class CalculationSheetItems {
 	@JsonProperty("parentItemUUID")
 	private String parentItemUUID;
 	@JsonProperty("rateAmount")
-	private double rateAmount;
+	private String rateAmount;
 	@JsonProperty("rateCurrency")
 	private String rateCurrency;
 	@JsonProperty("minAmount")
-	private double minAmount;
+	private String minAmount;
 	@JsonProperty("minCurrency")
 	private String minCurrency;	
 	@JsonProperty("maxAmount")
-	private double maxAmount;
+	private String maxAmount;
 	@JsonProperty("maxCurrency")
 	private String maxCurrency;
 	@JsonProperty("calculationBase")
@@ -82,10 +82,10 @@ public class CalculationSheetItems {
 		this.parentItemUUID = parentItemUUID;
 	}
 	@ApiModelProperty(value = "Rate Amount of the contract item", example = "100.00")
-	public double getRateAmount() {
+	public String getRateAmount() {
 		return rateAmount;
 	}
-	public void setRateAmount(double rateAmount) {
+	public void setRateAmount(String rateAmount) {
 		this.rateAmount = rateAmount;
 	}
 	@ApiModelProperty(value = "Rate Currency of the contract item", example = "INR")
@@ -96,10 +96,10 @@ public class CalculationSheetItems {
 		this.rateCurrency = rateCurrency;
 	}
 	@ApiModelProperty(value = "Minimum amount of the contract item", example = "")
-	public double getMinAmount() {
+	public String getMinAmount() {
 		return minAmount;
 	}
-	public void setMinAmount(double minAmount) {
+	public void setMinAmount(String minAmount) {
 		this.minAmount = minAmount;
 	}
 	@ApiModelProperty(value = "Minimum amount currency of the contract item", example = "")
@@ -110,10 +110,10 @@ public class CalculationSheetItems {
 		this.minCurrency = minCurrency;
 	}
 	@ApiModelProperty(value = "Maximum amount of the contract item", example = "")
-	public double getMaxAmount() {
+	public String getMaxAmount() {
 		return maxAmount;
 	}
-	public void setMaxAmount(double maxAmount) {
+	public void setMaxAmount(String maxAmount) {
 		this.maxAmount = maxAmount;
 	}
 	@ApiModelProperty(value = "Maximum amount currency of the contract item", example = "")
