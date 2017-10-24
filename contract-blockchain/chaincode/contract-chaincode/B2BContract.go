@@ -87,9 +87,6 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Response 
 
 	// Retrieve the requested Smart Contract function and arguments
 	function, args := APIstub.GetFunctionAndParameters()
-	var queryResult []string
-	var result string
-	var err error
 	fmt.Println(function)
 	fmt.Println(args)
 	// Route to the appropriate handler function to interact with the ledger appropriately
@@ -105,7 +102,7 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) pb.Response 
 	return shim.Error("Received unknown invoke function name - '" + function + "'")
 }
 
-func createContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (s *SmartContract) createContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
 		fmt.Println("Incorrect number of arguments. Expecting 1")
 		return shim.Error("Incorrect number of arguments. Expecting 1")
@@ -114,22 +111,22 @@ func createContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Respo
 	json.Unmarshal([]byte(args[0]), &contract)
 	result, err := APIstub.GetState(contract.ExternalFreightContractID)
 	if err != nil{
-		return shim.Error("Failed to get state of the ledger. Try after some time")
+		return shim.Error(err.Error())
 	}
 	if result != nil{
-		return shim.Error("Contract %s already exists", contract.ExternalFreightContractID)
+		return shim.Error("Contract " + contract.ExternalFreightContractID + " already exists", )
 	}
 	contractValue, _ := json.Marshal(contract)
 	createError := APIstub.PutState(contract.ExternalFreightContractID, contractValue)
 	if createError != nil {
 		fmt.Println("Failed to create contract: %s", contract.ExternalFreightContractID)
-		return shim.Error("Failed to create contract: %s", contract.ExternalFreightContractID)
+		return shim.Error("Failed to create contract: " + contract.ExternalFreightContractID)
 	}
 	fmt.Println(contract.ExternalFreightContractID, "saved successfully")
-	return shim.Success(contract)
+	return shim.Success(contractValue)
 }
 
-func queryContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (s *SmartContract) queryContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 1 {
 		fmt.Println("Incorrect arguments. Enter the external freight agreement ID")
@@ -139,16 +136,16 @@ func queryContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Respon
 	contractValue, err := APIstub.GetState(args[0])
 	if err != nil {
 		fmt.Println("Failed to get contract: %s", args[0])
-		return shim.Error("Failed to get contract: %s. Error: %s", args[0], err)
+		return shim.Error(err.Error())
 	}
 	if contractValue == nil {
 		fmt.Println("Failed to get contract: %s", args[0])
-		return shim.Error("Contract not found: %s", args[0])
+		return shim.Error("Contract not found: %s" + args[0])
 	}
 	return shim.Success(contractValue)
 }
 
-func updateContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (s *SmartContract) updateContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 1 {
 		fmt.Println("Incorrect number of arguments. Expecting 1")
@@ -160,10 +157,10 @@ func updateContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Respo
 	contractValue, err := APIstub.GetState(contract.ExternalFreightContractID)
 	if err != nil {
 		fmt.Println("Contract %s does not exist", contract.ExternalFreightContractID)
-		return shim.Error("Contract %s does not exist", contract.ExternalFreightContractID)
+		return shim.Error(err.Error())
 	}
 	if contractValue == nil{
-		return shim.Error("Contract %s does not exist", contract.ExternalFreightContractID)
+		return shim.Error("Contract " + contract.ExternalFreightContractID + "does not exist")
 	}
 
 	var contractOld B2BContract
@@ -190,9 +187,9 @@ func updateContract(APIstub shim.ChaincodeStubInterface, args []string) pb.Respo
 
 	if err != nil {
 		fmt.Println("Update of contract %s failed", contract.ExternalFreightContractID)
-		return shim.Error("Update of contract %s failed", contract.ExternalFreightContractID)
+		return shim.Error(err.Error())
 	}
-	return shim.Success(contract.ExternalFreightContractID + "updated")
+	return shim.Success(contractValueUpd)
 }
 
 // main function starts up the chaincode in the container during instantiate
