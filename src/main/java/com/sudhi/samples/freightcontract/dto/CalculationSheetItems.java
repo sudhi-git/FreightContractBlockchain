@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class CalculationSheetItems {
 	@JsonProperty("ItemUUID")
-	private String ItemUUID;
+	private String itemUUID;
 	@JsonProperty("ItemID")
 	private String itemId;
 	@JsonProperty("ChargeType")
@@ -41,10 +41,10 @@ public class CalculationSheetItems {
 	private String calcMethod;
 	@ApiModelProperty(value = "Item UUID of the contract item", example = "46c504e4-20a0-4de9-9705-2d66cb75c6bd")
 	public String getItemUUID() {
-		return ItemUUID;
+		return itemUUID;
 	}
-	public void setItemUUID(String itemUUID) {
-		ItemUUID = itemUUID;
+	public void setItemUUID(String iUUID) {
+		itemUUID = iUUID;
 	}
 	@ApiModelProperty(value = "Human readable format of the Item UUID of the contract item", example = "10")
 	public String getItemId() {
