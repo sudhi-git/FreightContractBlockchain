@@ -131,7 +131,7 @@ func createContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 	return contract.ExternalFreightContractID + "saved", nil
 }
 
-func queryContract(APIstub shim.ChaincodeStubInterface, args []string) (string, error) {
+func queryContract(APIstub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 
 	if len(args) != 1 {
 		fmt.Println("Incorrect arguments. Enter the enternal freight agreement ID")
