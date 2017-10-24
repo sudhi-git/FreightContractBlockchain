@@ -111,7 +111,7 @@ func createContract(APIstub shim.ChaincodeStubInterface, args []string) (string,
 		fmt.Println("Incorrect number of arguments. Expecting 1")
 		return "", fmt.Errorf("Incorrect number of arguments. Expecting 1")
 	}
-	var contract B2BContract
+	contract := B2BContract{}
 	json.Unmarshal([]byte(args[0]), &contract)
 	result, err := APIstub.GetState(contract.ExternalFreightContractID)
 	if err != nil{
