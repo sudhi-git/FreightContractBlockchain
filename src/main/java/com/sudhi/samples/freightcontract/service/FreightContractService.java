@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service;
 import com.sudhi.samples.freightcontract.blockchain.BlockchainHelper;
 import com.sudhi.samples.freightcontract.dto.FreightContractHeader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class FreightContractService {
+	Logger log = LoggerFactory.getLogger(FreightContractService.class);
 	private final String SHIPPER_ORG = "ShipperOrg";
 	private final String CARRIER_ORG = "CarrierOrg";
 	private final String LSP_ORG = "LSPOrg";
@@ -18,6 +22,8 @@ public class FreightContractService {
 	public ResponseEntity<?> createInChain(FreightContractHeader contract){
 		BlockchainHelper hfHelper = new BlockchainHelper();
 		String invokeOrg = null;
+		log.info(contract.toString());
+		log.info(contract.getOriginSystem());
 		switch (contract.getOriginSystem()) {
 		case LSP_SYS:
 			invokeOrg = this.LSP_ORG;
