@@ -19,7 +19,7 @@ The idea is to have a blockchain network comprising of the shipper, carrier and 
 
 ## Project Details
 
-This project has two main sections:
+This project has three main sections:
 1. Blockchain network for SAP TM
 2. B2B contract chaincode
 3. Spring boot based REST endpoints to interact with the chaincode deployed on the blockchain network
