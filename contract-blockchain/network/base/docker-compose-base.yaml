@@ -59,7 +59,6 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/carrierorg.saptm.com/peers/peer0.carrierorg.saptm.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/carrierorg.saptm.com/peers/peer0.carrierorg.saptm.com/tls:/etc/hyperledger/fabric/tls
-
     ports:
       - 8051:7051
       - 8053:7053

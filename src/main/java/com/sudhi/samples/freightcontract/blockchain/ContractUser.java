@@ -104,4 +104,8 @@ public class ContractUser implements User, Serializable{
 	public void setAffiliation(String affiliation){
 		this.affiliation = affiliation;
 	}
+	
+	public boolean isEnrolled(){
+		return this.enrollment != null;
+	}
 }

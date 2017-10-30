@@ -16,7 +16,6 @@ import com.amazonaws.services.s3.model.S3Object;
 
 public class S3Store {
 	static final String BUCKET_NAME_USERS = "blockchainusers";
-	static final String BUCKER_NAME_CHANNEL = "blockchainchannels";
 	public static void setUser(ContractUser user){
 		Logger log = LoggerFactory.getLogger(S3Store.class);
 		SystemPropertiesCredentialsProvider credsProvider = new SystemPropertiesCredentialsProvider();

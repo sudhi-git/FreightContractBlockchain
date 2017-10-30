@@ -76,7 +76,7 @@ function networkUp () {
 # generate artifacts if they don't exist
 if [ ! -d "crypto-config" ]; then
 generateCerts
-#replacePrivateKey
+replacePrivateKey
 generateChannelArtifacts
 fi
 if [ "${IF_COUCHDB}" == "couchdb" ]; then
@@ -105,7 +105,7 @@ removeUnwantedImages
 # remove orderer block and other channel configuration transactions and certs
 rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
 # remove the docker-compose yaml file that was customized to the example
-rm -f docker-compose-e2e.yaml
+rm -f docker-compose-cli.yaml
 fi
 }
 
@@ -123,7 +123,7 @@ OPTS="-i"
 fi
 
 # Copy the template to the file that will be modified to add the private key
-cp docker-compose-e2e-template.yaml docker-compose-e2e.yaml
+cp docker-compose-cli-template.yaml docker-compose-cli.yaml
 
 # The next steps will replace the template's contents with the
 # actual values of the private key file names for the three CAs.
@@ -131,18 +131,18 @@ CURRENT_DIR=$PWD
 cd crypto-config/peerOrganizations/shipperorg.saptm.com/ca/
 PRIV_KEY=$(ls *_sk)
 cd $CURRENT_DIR
-sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+sed $OPTS "s/CA0_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-cli.yaml
 cd crypto-config/peerOrganizations/carrierorg.saptm.com/ca/
 PRIV_KEY=$(ls *_sk)
 cd $CURRENT_DIR
-sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-cli.yaml
 cd crypto-config/peerOrganizations/lsporg.saptm.com/ca/
 PRIV_KEY=$(ls *_sk)
 cd $CURRENT_DIR
-sed $OPTS "s/CA3_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-cli.yaml
 # If MacOSX, remove the temporary backup of the docker-compose file
 if [ "$ARCH" == "Darwin" ]; then
-rm docker-compose-e2e.yamlt
+rm docker-compose-cli.yamlt
 fi
 }
 

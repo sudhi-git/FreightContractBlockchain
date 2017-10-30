@@ -24,7 +24,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.hyperledger.fabric.sdk.Enrollment;
+import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
+import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
 import org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +77,8 @@ public class InitializeConfig {
 		// Logging object
 		Logger log = LoggerFactory.getLogger(InitializeConfig.class);
 		ContractConfig configObject = ContractConfig.getConfig();
-		
+		// S3 credentials update
+		S3PropertyStore s3Props = new S3PropertyStore();
 		// Set the orderer configuration
 		ordOrg = new OrgObject();
 		String[] ordConfig = configObject.getOrdererConfig();
@@ -118,21 +121,20 @@ public class InitializeConfig {
 		} catch (InvalidArgumentException e) {
 			log.error(e.getMessage());
 		}
+		shipperOrg.getCaClient().setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
+		
 		//Admin of the Shipper Org
 		ContractUser shipperAdmin = new ContractUser(shipperOrg.getName()+"Admin", shipperOrg.getName());
 		shipperAdmin.setPeerUser(true);
 		shipperAdmin.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(SHIP_ADM_KEY_PATH).toFile()), Paths.get(SHIP_ADM_CERT_PATH).toFile()));
 		shipperAdmin.setMspid(shipperOrg.getMspid());
 		shipperOrg.setPeerAdmin(shipperAdmin);
-		contractOrgs.put("Shipper", shipperOrg);
 		
-		//Transaction user of this Shipper Org. Workaround till I can figure out why the enrolled user does not work :(
 		ContractUser shipperUser = new ContractUser(shipperOrg.getName()+"User", shipperOrg.getName());
 		shipperUser.setPeerUser(true);
-		shipperUser.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(SHIP_USR_KEY_PATH).toFile()), Paths.get(SHIP_USR_CERT_PATH).toFile()));
+		shipperUser.setEnrollment(getEnrollmentFromFile(getFileFromPath(Paths.get(SHIP_USR_KEY_PATH).toFile()), Paths.get(CARR_USR_CERT_PATH).toFile()));
 		shipperUser.setMspid(shipperOrg.getMspid());
 		shipperOrg.addUser(shipperUser);
-		
 		contractOrgs.put("Shipper", shipperOrg);
 		
 		// Set the Carrier Org configuration

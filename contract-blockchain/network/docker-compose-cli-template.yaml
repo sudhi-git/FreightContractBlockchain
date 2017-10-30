@@ -11,10 +11,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca0
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.shipperorg.saptm.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/a22daf356b2aab5792ea53e35f66fccef1d7f1aa2b3a2b92dbfbf96a448ea26a_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA0_PRIVATE_KEY
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start -n ca0 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.shipperorg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/a22daf356b2aab5792ea53e35f66fccef1d7f1aa2b3a2b92dbfbf96a448ea26a_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -n ca0 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.shipperorg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA0_PRIVATE_KEY -b admin@ShipperOrg:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/shipperorg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_ShipperOrg
@@ -28,10 +28,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca1
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.carrierorg.saptm.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/b22daf356b2aab5792ea53e35f66fccef1d7f1aa2b3a2b92dbfbf96a448ea26a_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start -n ca1 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.carrierorg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/b22daf356b2aab5792ea53e35f66fccef1d7f1aa2b3a2b92dbfbf96a448ea26a_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -n ca1 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.carrierorg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin@CarrierOrg:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/carrierorg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_CarrierOrg
@@ -45,12 +45,12 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca2
       - FABRIC_CA_SERVER_TLS_ENABLED=false
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.lsporg.saptm.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/c22daf356b2aab5792ea53e35f66fccef1d7f1aa2b3a2b92dbfbf96a448ea26a_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
     ports:
       - "9054:7054"
-    command: sh -c 'fabric-ca-server start -n ca2 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.lsporg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/c22daf356b2aab5792ea53e35f66fccef1d7f1aa2b3a2b92dbfbf96a448ea26a_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start -n ca2 --registry.maxenrollments -1 --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.lsporg.saptm.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin@LSPOrg:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/carrierorg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/lsporg.saptm.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_LSPOrg
     networks:
       - saptmn

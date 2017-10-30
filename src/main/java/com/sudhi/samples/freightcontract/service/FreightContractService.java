@@ -17,7 +17,6 @@ public class FreightContractService {
 	private final String SHIPPER_ORG = "ShipperOrg";
 	private final String CARRIER_ORG = "CarrierOrg";
 	private final String LSP_ORG = "LSPOrg";
-	private final String USER = "CHANDRASHEKS";
 	private final String SHIPPER_SYS = "C2TCLNT001";
 	private final String CARRIER_SYS = "C3TCLNT001";
 	private final String LSP_SYS = "C4VCLNT001";
@@ -45,7 +44,8 @@ public class FreightContractService {
 		default:
 			break;
 		}
-		ResponseEntity<?> response = hfHelper.createContract(this.USER, invokeOrg, contract);
+		String user = contract.getCreatedBy()+"@"+invokeOrg;
+		ResponseEntity<?> response = hfHelper.createContract(user, invokeOrg, contract);
 		return response;
 	}
 	
@@ -64,7 +64,8 @@ public class FreightContractService {
 		default:
 			break;
 		}
-		ResponseEntity<?> response = hfHelper.updateContract(this.USER, invokeOrg, contract);
+		String user = contract.getChangedBy()+"@"+invokeOrg;
+		ResponseEntity<?> response = hfHelper.updateContract(user, invokeOrg, contract);
 		return response;
 	}
 	
@@ -83,7 +84,8 @@ public class FreightContractService {
 		default:
 			break;
 		}
-		ResponseEntity<?> response = hfHelper.queryContract(this.USER, invokeOrg, externalFreightAgreementId);
+		String user = system+"@"+invokeOrg;
+		ResponseEntity<?> response = hfHelper.queryContract(user, invokeOrg, externalFreightAgreementId);
 		return response;
 	}
 }

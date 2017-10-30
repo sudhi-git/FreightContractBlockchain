@@ -5,3 +5,4 @@ target
 contract-blockchain/network/crypto-config
 contract-blockchain/network/channel-artifacts/*.tx
 contract-blockchain/network/channel-artifacts/*.block
+contract-blockchain/network/docker-compose-cli.yaml

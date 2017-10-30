@@ -12,6 +12,8 @@ import org.hyperledger.fabric.sdk.exception.ProposalException;
 import org.hyperledger.fabric.sdk.exception.TransactionException;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
+import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
+import org.hyperledger.fabric_ca.sdk.exception.EnrollmentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -98,8 +100,35 @@ public class BlockchainHelper {
             fabricChannel.setDeployWaitTime(contractConfig.getDEPLOYWAITTIME());
             fabricChannel.setTransactionWaitTime(contractConfig.getINVOKEWAITTIME());
             
-            // Set the transaction user context for the transaction proposals
-            fabricClient.setUserContext(contractOrg.getUser(contractOrg.getName()+"User"));
+            // Enroll the admin to the CA to enroll the transaction user
+            ContractUser admin = S3Store.getUser("admin@"+contractOrg.getName(), contractOrg.getName());
+            if(!admin.isEnrolled()){
+				try {
+					admin.setMspid(contractOrg.getMspid());
+					admin.setOrg(contractOrg.getName());
+					admin.setEnrollment(contractOrg.getCaClient().enroll(admin.getName(), "adminpw"));
+				} catch (EnrollmentException | org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException e) {
+					log.error(e.getMessage());
+				}
+			}
+            
+            // First check in S3 if the user already exists
+            ContractUser transactionUser = S3Store.getUser(invokeUser, contractOrg.getName());
+            if(!transactionUser.isEnrolled()){
+            	// On board the user invoking the transaction, to the Org's CA
+        		try {
+        			RegistrationRequest rr = new RegistrationRequest(transactionUser.getName(), "org1.department1");
+        			transactionUser.setEnrollmentSecret(contractOrg.getCaClient().register(rr, admin));
+        			transactionUser.setMspid(contractOrg.getMspid());
+        			transactionUser.setOrg(contractOrg.getName());
+        			transactionUser.setEnrollment(contractOrg.getCaClient().enroll(transactionUser.getName(), transactionUser.getEnrollmentSecret()));
+        		} catch (Exception e1) {
+        			log.error(e1.getMessage());
+        		}
+            }
+            
+            // Add the transaction user to the org which will be used to set the context later on
+            contractOrg.addUser(transactionUser);
 	}
 	
     public ResponseEntity<?> createContract(String invokeUser, String invokeOrg, FreightContractHeader contractObject) {
@@ -111,8 +140,8 @@ public class BlockchainHelper {
         	initHFC(invokeUser, invokeOrg);
     	
         	// Perform "Create Contract" transaction proposal
-        	fabricClient.setUserContext(contractOrg.getUser(contractOrg.getName()+"User"));
-
+        	fabricClient.setUserContext(contractOrg.getUser(invokeUser));
+        	// Create transaction proposal
             TransactionProposalRequest createContract = fabricClient.newTransactionProposalRequest();
             createContract.setChaincodeID(chaincodeID);
             createContract.setFcn("createContract");
@@ -123,9 +152,9 @@ public class BlockchainHelper {
             tm2.put("method", "TransactionProposalRequest".getBytes(UTF_8));
             tm2.put("result", ":)".getBytes(UTF_8));  
             tm2.put(EXPECTED_EVENT_NAME, EXPECTED_EVENT_DATA);
-
 			createContract.setTransientMap(tm2);
 	        log.info("Sending create transaction proposal");
+	        // Send transaction proposal to Fabric
 	        responses = fabricChannel.sendTransactionProposal(createContract, fabricChannel.getPeers());
 	        for (ProposalResponse response : responses) {
 	            if (response.getStatus() == ProposalResponse.Status.SUCCESS) {
@@ -188,7 +217,7 @@ public class BlockchainHelper {
         	initHFC(invokeUser, invokeOrg);
     	
         	// Perform "Update Contract" transaction proposal
-        	fabricClient.setUserContext(contractOrg.getUser(contractOrg.getName()+"User"));
+        	fabricClient.setUserContext(contractOrg.getUser(invokeUser));
 
             TransactionProposalRequest updateContract = fabricClient.newTransactionProposalRequest();
             updateContract.setChaincodeID(chaincodeID);
@@ -207,7 +236,7 @@ public class BlockchainHelper {
 	            }
 	        }
 	        if(failed.size()>0){
-	        	log.error("Creation of contract failed");
+	        	log.error("Update of contract failed");
 	        	for(ProposalResponse err:failed){
 	        		fabricResponse.setMessage(err.getMessage());
 	        		fabricResponse.setHTTPStatus(500);
@@ -261,7 +290,7 @@ public class BlockchainHelper {
         	initHFC(invokeUser, invokeOrg);
     	
         	// Perform "Query Contract" transaction proposal
-        	fabricClient.setUserContext(contractOrg.getUser(contractOrg.getName()+"User"));
+        	fabricClient.setUserContext(contractOrg.getUser(invokeUser));
             QueryByChaincodeRequest queryByChaincodeRequest = fabricClient.newQueryProposalRequest();
             fcnArgs[0] = ConstructArguments.prepareQueryParameters(externalFreightContractId);
             queryByChaincodeRequest.setArgs(new String[] {externalFreightContractId});
