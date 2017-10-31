@@ -122,6 +122,7 @@ public class BlockchainHelper {
         			transactionUser.setMspid(contractOrg.getMspid());
         			transactionUser.setOrg(contractOrg.getName());
         			transactionUser.setEnrollment(contractOrg.getCaClient().enroll(transactionUser.getName(), transactionUser.getEnrollmentSecret()));
+        			log.info("User " + transactionUser.getName() + " on-boarded with certificate " + transactionUser.getEnrollment().getCert());
         		} catch (Exception e1) {
         			log.error(e1.getMessage());
         		}
