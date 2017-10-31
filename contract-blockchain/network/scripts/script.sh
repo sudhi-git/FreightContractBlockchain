@@ -219,10 +219,6 @@ installChaincode 2
 #Instantiate chaincode on shipper peer
 echo "Instantiating chaincode on ShipperOrg/peer0..."
 instantiateChaincode 0
-echo "Instantiating chaincode on CarrierOrg/peer0..."
-instantiateChaincode 1
-echo "Instantiating chaincode on LSPOrg/peer0..."
-instantiateChaincode 2
 
 #Query on chaincode on Peer0/Org1
 #echo "Querying chaincode on org1/peer0..."
